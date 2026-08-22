@@ -5,7 +5,16 @@ import { env } from "../config/env.js";
 
 export default fp(async function mongoPlugin(fastify: FastifyInstance) {
   mongoose.set("strictQuery", true);
-  await mongoose.connect(env.MONGODB_URI);
+
+  try {
+    await mongoose.connect(env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000,
+    });
+  } catch (err) {
+    fastify.log.error({ err }, "MongoDB connection failed");
+    throw err;
+  }
 
   fastify.log.info("Connected to MongoDB");
 

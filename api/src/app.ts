@@ -9,6 +9,7 @@ import { env } from "./config/env.js";
 
 export async function buildApp() {
   const app = Fastify({
+    pluginTimeout: 15000,
     logger: {
       level: env.NODE_ENV === "production" ? "info" : "debug",
       transport: env.NODE_ENV === "production" ? undefined : { target: "pino-pretty" },
