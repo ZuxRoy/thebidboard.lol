@@ -1,0 +1,80 @@
+import {
+  LayoutGrid,
+  Cloud,
+  Smartphone,
+  Gamepad2,
+  Wrench,
+  Bot,
+  Search,
+  Megaphone,
+  Users,
+  ShoppingCart,
+  Landmark,
+  GraduationCap,
+  Store,
+  Briefcase,
+  Code2,
+  Coins,
+  Palette,
+  ListChecks,
+  type LucideIcon,
+} from "lucide-react";
+
+// Keep category ids in sync with api/src/services/categories.ts
+export const CATEGORY_IDS = [
+  "saas",
+  "mobile-apps",
+  "games",
+  "tools-automation",
+  "ai-agents",
+  "seo-tools",
+  "marketing-sales",
+  "people",
+  "ecommerce",
+  "fintech",
+  "edtech",
+  "marketplace",
+  "agencies",
+  "developer-tools",
+  "web3-crypto",
+  "design-creative",
+  "productivity",
+] as const;
+
+export type CategoryId = (typeof CATEGORY_IDS)[number];
+export type FilterId = "all" | CategoryId;
+
+export interface CategoryMeta {
+  id: FilterId;
+  label: string;
+  icon: LucideIcon;
+}
+
+export const CATEGORIES: CategoryMeta[] = [
+  { id: "all", label: "All", icon: LayoutGrid },
+  { id: "saas", label: "SaaS", icon: Cloud },
+  { id: "mobile-apps", label: "Mobile Apps", icon: Smartphone },
+  { id: "games", label: "Games", icon: Gamepad2 },
+  { id: "tools-automation", label: "Tools & Automation", icon: Wrench },
+  { id: "ai-agents", label: "AI Agents", icon: Bot },
+  { id: "seo-tools", label: "SEO Tools", icon: Search },
+  { id: "marketing-sales", label: "Marketing & Sales", icon: Megaphone },
+  { id: "people", label: "People", icon: Users },
+  { id: "ecommerce", label: "E-Commerce", icon: ShoppingCart },
+  { id: "fintech", label: "Fintech", icon: Landmark },
+  { id: "edtech", label: "EdTech", icon: GraduationCap },
+  { id: "marketplace", label: "Marketplace", icon: Store },
+  { id: "agencies", label: "Agencies", icon: Briefcase },
+  { id: "developer-tools", label: "Developer Tools", icon: Code2 },
+  { id: "web3-crypto", label: "Web3 & Crypto", icon: Coins },
+  { id: "design-creative", label: "Design & Creative", icon: Palette },
+  { id: "productivity", label: "Productivity", icon: ListChecks },
+];
+
+export const CATEGORY_FORM_OPTIONS = CATEGORIES.filter((c) => c.id !== "all") as Array<
+  CategoryMeta & { id: CategoryId }
+>;
+
+export function getCategoryMeta(id: string): CategoryMeta | undefined {
+  return CATEGORIES.find((c) => c.id === id);
+}
