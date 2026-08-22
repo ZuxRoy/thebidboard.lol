@@ -13,8 +13,8 @@ export default function BulletinBoard({ onPickAmount }: BulletinBoardProps) {
   const nextAmountCents = data?.nextAmountCents ?? 100;
 
   return (
-    <div className="corkboard w-full max-w-lg mx-auto rounded-sm px-4 py-4 sm:px-6 sm:py-5">
-      <div className="flex flex-col sm:flex-row justify-center items-stretch gap-5 sm:gap-6 max-w-2xl mx-auto">
+    <div className="corkboard rounded-sm px-4 py-4 sm:px-6 sm:py-5">
+      <div className="flex flex-col sm:flex-row justify-center items-stretch gap-5 sm:gap-6">
         <PinnedNote rotate="-rotate-2 sm:-rotate-3">
           <p className="text-[10px] uppercase tracking-widest text-ink-soft mb-1">Starting at</p>
           <p className="headline text-lg sm:text-xl font-bold mb-2.5">Book Spot on the Board</p>
