@@ -17,26 +17,26 @@ interface RankStyle {
 const RANK_STYLES: RankStyle[] = [
   {
     size: "lg",
-    card: "p-5 sm:p-7 border-accent",
+    card: "p-3.5 sm:p-4 border-accent",
     wrapper: "-rotate-2 z-30",
-    badgePosition: "-top-5 -left-5 sm:-top-6 sm:-left-6",
-    badgeSize: "w-14 h-14 sm:w-16 sm:h-16 text-xl sm:text-2xl",
+    badgePosition: "-top-4 -left-4 sm:-top-5 sm:-left-5",
+    badgeSize: "w-12 h-12 sm:w-14 sm:h-14 text-lg sm:text-xl",
     badgeColor: "bg-accent text-paper",
   },
   {
     size: "md",
-    card: "p-4 sm:p-5 border-ink",
+    card: "p-3 sm:p-3.5 border-ink",
     wrapper: "rotate-2 translate-x-3 sm:translate-x-6 z-20",
-    badgePosition: "-top-4 -right-4 sm:-top-5 sm:-right-5",
-    badgeSize: "w-11 h-11 sm:w-14 sm:h-14 text-base sm:text-lg",
+    badgePosition: "-top-3.5 -right-3.5 sm:-top-4 sm:-right-4",
+    badgeSize: "w-10 h-10 sm:w-12 sm:h-12 text-sm sm:text-base",
     badgeColor: "bg-ink text-paper",
   },
   {
     size: "sm",
-    card: "p-3.5 sm:p-4 border-ink",
+    card: "p-2.5 sm:p-3 border-ink",
     wrapper: "-rotate-1 translate-x-1 sm:-translate-x-2 z-10",
-    badgePosition: "-top-3.5 -left-3.5 sm:-top-4 sm:-left-4",
-    badgeSize: "w-9 h-9 sm:w-11 sm:h-11 text-sm sm:text-base",
+    badgePosition: "-top-3 -left-3 sm:-top-3.5 sm:-left-3.5",
+    badgeSize: "w-8 h-8 sm:w-10 sm:h-10 text-xs sm:text-sm",
     badgeColor: "bg-ink text-paper",
   },
 ];
@@ -45,7 +45,7 @@ export default function TopThreeHero({ items }: TopThreeHeroProps) {
   if (items.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8">
+    <div className="flex flex-col gap-4 sm:gap-5">
       {items.slice(0, 3).map((item, index) => {
         const style = RANK_STYLES[index];
         return (
@@ -61,7 +61,7 @@ export default function TopThreeHero({ items }: TopThreeHeroProps) {
               rel="noopener noreferrer"
               className={`block newsprint-card ${style.card} hover:scale-[1.03] hover:rotate-0 hover:z-40 transition-transform duration-300`}
             >
-              <ProductCardContent item={item} size={style.size} />
+              <ProductCardContent item={item} size={style.size} variant="compact" />
             </a>
           </div>
         );
