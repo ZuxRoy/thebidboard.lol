@@ -10,7 +10,7 @@ const ICONS: Record<SocialPlatform, typeof FaInstagram> = {
 
 interface SocialIconsRowProps {
   socials: Partial<Record<SocialPlatform, string>>;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
 }
 
 export default function SocialIconsRow({ socials, size = "sm" }: SocialIconsRowProps) {
@@ -20,8 +20,8 @@ export default function SocialIconsRow({ socials, size = "sm" }: SocialIconsRowP
 
   if (entries.length === 0) return null;
 
-  const iconSize = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
-  const boxSize = size === "sm" ? "w-6 h-6" : "w-7 h-7";
+  const iconSize = size === "sm" ? "w-3.5 h-3.5" : size === "md" ? "w-4 h-4" : "w-5 h-5";
+  const boxSize = size === "sm" ? "w-6 h-6" : size === "md" ? "w-7 h-7" : "w-9 h-9";
 
   return (
     <div className="flex items-center gap-1.5">

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useListings, type ListingRow as ListingRowData } from "../lib/api";
 import type { FilterId } from "../lib/categories";
-import Podium from "./Podium";
 import ListingRow from "./ListingRow";
 
 const PAGE_SIZE = 100;
@@ -41,7 +40,7 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
     );
   }
 
-  const podium = accumulated.filter((item) => item.rank <= 3);
+  const top3 = accumulated.filter((item) => item.rank <= 3);
   const top10 = accumulated.filter((item) => item.rank > 3 && item.rank <= 10);
   const top100 = accumulated.filter((item) => item.rank > 10 && item.rank <= 100);
   const rest = accumulated.filter((item) => item.rank > 100);
@@ -51,7 +50,16 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
 
   return (
     <div className="flex flex-col gap-10">
-      <Podium items={podium} />
+      {top3.length > 0 ? (
+        <section>
+          <SectionDivider label="Top 3" />
+          <div className="flex flex-col gap-2">
+            {top3.map((item) => (
+              <ListingRow key={item.id} item={item} accent />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {top10.length > 0 ? (
         <section>

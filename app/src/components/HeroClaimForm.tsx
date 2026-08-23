@@ -72,7 +72,7 @@ const HeroClaimForm = forwardRef<HeroClaimFormHandle>(function HeroClaimForm(_pr
   }
 
   return (
-    <div ref={formRef} className="newsprint-card p-5 sm:p-7 max-w-xl mx-auto">
+    <div ref={formRef} className="newsprint-card p-5 sm:p-7 w-full">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label className="text-[11px] uppercase tracking-wide text-ink-soft mb-1 block">

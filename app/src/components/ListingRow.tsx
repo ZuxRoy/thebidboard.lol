@@ -1,41 +1,33 @@
 import type { ListingRow as ListingRowData } from "../lib/api";
-import { getCategoryMeta } from "../lib/categories";
-import { formatAmount } from "../lib/validators";
-import SocialIconsRow from "./SocialIconsRow";
+import ProductCardContent from "./ProductCardContent";
 
 interface ListingRowProps {
   item: ListingRowData;
+  accent?: boolean;
 }
 
-export default function ListingRow({ item }: ListingRowProps) {
-  const meta = getCategoryMeta(item.category);
-
+export default function ListingRow({ item, accent = false }: ListingRowProps) {
   return (
     <a
       href={item.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-3 sm:gap-4 border border-ink/30 bg-paper px-3 py-3 sm:px-4 hover:border-ink transition-colors"
+      className={`block border px-4 py-3.5 sm:px-5 sm:py-4 transition-colors ${
+        accent
+          ? "border-accent bg-accent/5 hover:border-accent-dark"
+          : "border-ink/30 bg-paper hover:border-ink"
+      }`}
     >
-      <span className="amount w-9 sm:w-11 shrink-0 text-center text-sm sm:text-base font-bold text-ink-soft">
-        #{item.rank}
-      </span>
-
-      <div className="min-w-0 flex-1">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="font-bold truncate">{item.domain}</p>
-          <p className="amount font-semibold text-accent-dark shrink-0">{formatAmount(item.amountCents)}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-          <p className="text-sm text-ink-soft truncate max-w-full sm:max-w-xs">{item.description}</p>
-          {meta ? (
-            <span className="text-[11px] uppercase tracking-wide text-ink-soft flex items-center gap-1 shrink-0">
-              <meta.icon className="w-3 h-3" /> {meta.label}
-            </span>
-          ) : null}
-        </div>
-        <div className="mt-2">
-          <SocialIconsRow socials={item.socials} />
+      <div className="flex items-start gap-3">
+        <span
+          className={`amount shrink-0 text-sm sm:text-base font-bold pt-1.5 ${
+            accent ? "text-accent-dark" : "text-ink-soft"
+          }`}
+        >
+          #{item.rank}
+        </span>
+        <div className="min-w-0 flex-1">
+          <ProductCardContent item={item} size="sm" />
         </div>
       </div>
     </a>
