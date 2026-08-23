@@ -5,6 +5,7 @@ import rateLimit from "@fastify/rate-limit";
 import mongoPlugin from "./plugins/mongo.js";
 import listingsRoutes from "./routes/listings.js";
 import webhookRoutes from "./routes/webhooks.js";
+import ogRoutes from "./routes/og.js";
 import { env } from "./config/env.js";
 
 export async function buildApp() {
@@ -25,6 +26,7 @@ export async function buildApp() {
 
   await app.register(listingsRoutes, { prefix: "/api" });
   await app.register(webhookRoutes, { prefix: "/api" });
+  await app.register(ogRoutes, { prefix: "/api" });
 
   return app;
 }

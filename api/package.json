@@ -14,16 +14,19 @@
     "@fastify/cors": "^10.0.1",
     "@fastify/helmet": "^12.0.1",
     "@fastify/rate-limit": "^10.1.1",
+    "@resvg/resvg-js": "^2.6.2",
     "dotenv": "^16.4.5",
     "fastify": "^5.1.0",
     "fastify-plugin": "^5.0.1",
     "mongoose": "^8.8.1",
     "node-cron": "^3.0.3",
+    "satori": "^0.33.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
     "@types/node-cron": "^3.0.11",
+    "@types/react": "^18.3.31",
     "pino-pretty": "^11.3.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
