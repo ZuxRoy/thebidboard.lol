@@ -1,14 +1,14 @@
 /**
  * Attach this Worker to thebidboard.lol (frontend hostname, not the API).
  *
- * Immediate X card refresh (existing posts of / stay stale):
- *   1. Purge Cloudflare cache for https://api.thebidboard.lol/api/og-image.png
- *   2. Share https://thebidboard.lol/?v=2 in a new X draft
+ * Crawlers of https://thebidboard.lol/ get og:image?v=<live board fingerprint>.
+ * Always share the base URL. Do not increment ?v=3, ?v=4, … on the page.
  *
- * Deploy on the frontend zone:
- *   wrangler deploy
- *   Bind API_BASE_URL=https://api.thebidboard.lol
- *   Route: thebidboard.lol/* (and www if used)
+ * One-time unstick if X still shows the old “defender #1” card:
+ *   1. Purge Cloudflare for https://api.thebidboard.lol/api/og-image.png
+ *   2. Paste https://thebidboard.lol/ in a new X draft; use ?v=2 only if that preview is still stale
+ *
+ * Deploy: cd edge && wrangler deploy
  */
 
 const CRAWLER_UA = /Twitterbot|facebookexternalhit|Slackbot|Discordbot|LinkedInBot|WhatsApp/i;

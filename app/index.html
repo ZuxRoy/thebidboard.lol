@@ -15,12 +15,9 @@
 
     <!--
       Open Graph / Twitter Card.
-      The image is rendered live by the API. X caches by page URL and image URL.
-      To refresh an existing X card after deploy:
-        1. Purge Cloudflare for https://api.thebidboard.lol/api/og-image.png
-        2. Share https://thebidboard.lol/?v=2 in a new X draft (composer preview is ground truth)
-      Bare https://thebidboard.lol/ tweets keep the old card until X recrawls.
-      The edge worker on thebidboard.lol rewrites og:image/?v= to the live board fingerprint for crawlers.
+      Share https://thebidboard.lol/ — do not bump ?v= on the page for each listing.
+      Crawlers (Twitterbot, etc.) get live og:image?v=<fingerprint> from /api/og-card.html
+      via origin middleware (and the optional Cloudflare worker). ?v=2 is a static fallback.
     -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://thebidboard.lol/" />
