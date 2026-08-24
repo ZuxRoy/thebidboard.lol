@@ -1,8 +1,10 @@
-import type { FastifyInstance } from "fastify";
+import { createHash } from "node:crypto";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { Listing } from "../models/Listing.js";
 import { getOgFonts } from "../services/ogFonts.js";
+import { env } from "../config/env.js";
 
 const CARD_WIDTH = 1200;
 const CARD_HEIGHT = 630;
@@ -21,6 +23,49 @@ interface TopListing {
 
 function formatAmount(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
+}
+
+function boardFingerprint(listings: TopListing[]): string {
+  const payload = listings.map((l) => `${l.domain}:${l.totalPaid}`).join("|") || "empty";
+  return createHash("sha256").update(payload).digest("hex").slice(0, 12);
+}
+
+async function fetchTopListings(): Promise<TopListing[]> {
+  const rows = await Listing.find({ status: "active" }).sort({ totalPaid: -1 }).limit(3).lean();
+  return rows.map((l) => ({ domain: l.domain, totalPaid: l.totalPaid }));
+}
+
+async function loadBoard(): Promise<{ listings: TopListing[]; fingerprint: string }> {
+  const listings = await fetchTopListings();
+  return { listings, fingerprint: boardFingerprint(listings) };
+}
+
+function siteUrl(): string {
+  return env.APP_BASE_URL.endsWith("/") ? env.APP_BASE_URL : `${env.APP_BASE_URL}/`;
+}
+
+function headerString(value: string | string[] | undefined): string | undefined {
+  if (Array.isArray(value)) return value.join(",");
+  return value;
+}
+
+function publicApiOrigin(request: FastifyRequest): string {
+  const xfProto = headerString(request.headers["x-forwarded-proto"]);
+  const proto = xfProto?.split(",")[0]?.trim() || request.protocol;
+  const xfHost = headerString(request.headers["x-forwarded-host"]);
+  const host = xfHost?.split(",")[0]?.trim() || request.headers.host || request.hostname;
+  return `${proto}://${host}`;
+}
+
+function escapeHtml(value: string): string {
+  return value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function etagMatches(header: string | string[] | undefined, fingerprint: string): boolean {
+  const raw = headerString(header);
+  if (!raw) return false;
+  const expected = `"${fingerprint}"`;
+  return raw.split(",").some((tag) => tag.trim().replace(/^W\//, "") === expected);
 }
 
 function faviconUrl(domain: string, size: number): string {
@@ -254,18 +299,10 @@ function buildPopulatedCard(listings: TopListing[]) {
   };
 }
 
-async function renderOgImage(): Promise<Buffer> {
-  const topListings = await Listing.find({ status: "active" })
-    .sort({ totalPaid: -1 })
-    .limit(3)
-    .lean();
+async function renderOgImage(listings: TopListing[]): Promise<Buffer> {
+  const nextAmountCents = (listings[0]?.totalPaid ?? 0) + 100;
 
-  const nextAmountCents = (topListings[0]?.totalPaid ?? 0) + 100;
-
-  const element =
-    topListings.length > 0
-      ? buildPopulatedCard(topListings.map((l) => ({ domain: l.domain, totalPaid: l.totalPaid })))
-      : buildEmptyCard(nextAmountCents);
+  const element = listings.length > 0 ? buildPopulatedCard(listings) : buildEmptyCard(nextAmountCents);
 
   const fonts = await getOgFonts();
 
@@ -282,11 +319,77 @@ async function renderOgImage(): Promise<Buffer> {
   return resvg.render().asPng();
 }
 
+function buildOgCardHtml(pageUrl: string, imageUrl: string): string {
+  const page = escapeHtml(pageUrl);
+  const image = escapeHtml(imageUrl);
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>The BidBoard</title>
+    <meta name="description" content="TheBidBoard — claim your spot on the board." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${page}" />
+    <meta property="og:title" content="The BidBoard" />
+    <meta property="og:description" content="TheBidBoard — claim your spot on the board." />
+    <meta property="og:image" content="${image}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The BidBoard" />
+    <meta name="twitter:description" content="TheBidBoard — claim your spot on the board." />
+    <meta name="twitter:image" content="${image}" />
+  </head>
+  <body></body>
+</html>
+`;
+}
+
 export default async function ogRoutes(fastify: FastifyInstance) {
-  fastify.get("/og-image.png", async (_request, reply) => {
+  fastify.get("/og-fingerprint", async (_request, reply) => {
     try {
-      const png = await renderOgImage();
-      reply.header("Content-Type", "image/png").header("Cache-Control", "public, max-age=60").send(png);
+      const { fingerprint } = await loadBoard();
+      reply.header("Cache-Control", "no-store").send({ v: fingerprint });
+    } catch (err) {
+      fastify.log.error(err, "Failed to load OG fingerprint");
+      reply.status(500).send({ error: "Failed to load preview fingerprint" });
+    }
+  });
+
+  fastify.get("/og-card.html", async (request, reply) => {
+    try {
+      const { fingerprint } = await loadBoard();
+      const imageUrl = `${publicApiOrigin(request)}/api/og-image.png?v=${encodeURIComponent(fingerprint)}`;
+      reply
+        .header("Cache-Control", "no-store")
+        .type("text/html; charset=utf-8")
+        .send(buildOgCardHtml(siteUrl(), imageUrl));
+    } catch (err) {
+      fastify.log.error(err, "Failed to render OG card HTML");
+      reply.status(500).send({ error: "Failed to render preview card" });
+    }
+  });
+
+  fastify.get("/og-image.png", async (request, reply) => {
+    try {
+      const { listings, fingerprint } = await loadBoard();
+      if (etagMatches(request.headers["if-none-match"], fingerprint)) {
+        return reply
+          .code(304)
+          .header("ETag", `"${fingerprint}"`)
+          .header("Cache-Control", "public, max-age=60, must-revalidate")
+          .header("CDN-Cache-Control", "max-age=60")
+          .send();
+      }
+
+      const png = await renderOgImage(listings);
+      reply
+        .header("Content-Type", "image/png")
+        .header("ETag", `"${fingerprint}"`)
+        .header("Cache-Control", "public, max-age=60, must-revalidate")
+        .header("CDN-Cache-Control", "max-age=60")
+        .send(png);
     } catch (err) {
       fastify.log.error(err, "Failed to render OG image");
       reply.status(500).send({ error: "Failed to render preview image" });

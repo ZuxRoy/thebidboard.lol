@@ -13,13 +13,20 @@
     />
     <title>The BidBoard</title>
 
-    <!-- Open Graph / Twitter Card — the referenced og:image URL is rendered live by the API on every fetch -->
+    <!--
+      Open Graph / Twitter Card.
+      The image is rendered live by the API. X caches by page URL and image URL.
+      To refresh an existing X card after deploy:
+        1. Purge Cloudflare for https://api.thebidboard.lol/api/og-image.png
+        2. Share https://thebidboard.lol/?v=2 in a new X draft (composer preview is ground truth)
+      Bare https://thebidboard.lol/ tweets keep the old card until X recrawls.
+      The edge worker on thebidboard.lol rewrites og:image/?v= to the live board fingerprint for crawlers.
+    -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://thebidboard.lol/" />
     <meta property="og:title" content="The BidBoard" />
     <meta property="og:description" content="TheBidBoard — claim your spot on the board." />
-    <!-- TODO: replace with your real API hostname once deployed -->
-    <meta property="og:image" content="https://api.thebidboard.lol/api/og-image.png" />
+    <meta property="og:image" content="https://api.thebidboard.lol/api/og-image.png?v=2" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
@@ -27,7 +34,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="The BidBoard" />
     <meta name="twitter:description" content="TheBidBoard — claim your spot on the board." />
-    <meta name="twitter:image" content="https://api.thebidboard.lol/api/og-image.png" />
+    <meta name="twitter:image" content="https://api.thebidboard.lol/api/og-image.png?v=2" />
   </head>
   <body>
     <div id="root"></div>

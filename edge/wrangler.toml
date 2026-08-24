@@ -1,0 +1,10 @@
+name = "thebidboard-og-meta"
+main = "og-meta-worker.js"
+compatibility_date = "2026-08-25"
+
+[vars]
+API_BASE_URL = "https://api.thebidboard.lol"
+
+[[routes]]
+pattern = "thebidboard.lol/*"
+zone_name = "thebidboard.lol"
