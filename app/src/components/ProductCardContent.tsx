@@ -1,85 +1,59 @@
+import { ArrowSquareOut } from "@phosphor-icons/react";
 import type { ListingRow as ListingRowData } from "../lib/api";
-import { formatAmount } from "../lib/validators";
+import { formatAmount, formatTimeAgo } from "../lib/validators";
 import ProductFavicon from "./ProductFavicon";
 import CategoryPill from "./CategoryPill";
 import SocialIconsRow from "./SocialIconsRow";
+import RankBadge from "./RankBadge";
 
-export type CardContentSize = "sm" | "md" | "lg";
-export type CardContentVariant = "compact" | "detailed";
+export type CardContentSize = "default" | "featured";
 
 interface ProductCardContentProps {
   item: ListingRowData;
   size?: CardContentSize;
-  variant?: CardContentVariant;
-  rank?: number;
+  compact?: boolean;
 }
 
-const DOMAIN_TEXT: Record<CardContentSize, string> = {
-  sm: "text-sm sm:text-base",
-  md: "text-base sm:text-lg",
-  lg: "text-lg sm:text-xl",
-};
-
-const AMOUNT_TEXT: Record<CardContentSize, string> = {
-  sm: "text-sm sm:text-base",
-  md: "text-base sm:text-lg",
-  lg: "text-lg sm:text-xl",
-};
-
-const DESCRIPTION_TEXT: Record<CardContentSize, string> = {
-  sm: "text-sm",
-  md: "text-sm sm:text-base",
-  lg: "text-sm sm:text-base",
-};
-
-const FAVICON_SIZE: Record<CardContentSize, "sm" | "md" | "lg"> = {
-  sm: "sm",
-  md: "md",
-  lg: "lg",
-};
-
-const SOCIAL_SIZE: Record<CardContentSize, "sm" | "md" | "lg"> = {
-  sm: "md",
-  md: "lg",
-  lg: "lg",
-};
-
-export default function ProductCardContent({
-  item,
-  size = "md",
-  variant = "detailed",
-  rank,
-}: ProductCardContentProps) {
-  const isCompact = variant === "compact";
+export default function ProductCardContent({ item, size = "default", compact = false }: ProductCardContentProps) {
+  const isFeatured = size === "featured" && !compact;
 
   return (
-    <div className="flex flex-col gap-1.5 min-w-0">
-      <div className="flex items-center gap-2.5 min-w-0">
-        {rank !== undefined ? (
-          <span className={`amount shrink-0 font-bold text-ink-soft ${AMOUNT_TEXT[size]}`}>
-            #{rank}
-          </span>
-        ) : null}
-        <ProductFavicon domain={item.domain} size={FAVICON_SIZE[size]} />
-        <p className={`font-bold truncate flex-1 ${DOMAIN_TEXT[size]}`}>{item.domain}</p>
-        <p className={`amount font-bold text-accent-dark shrink-0 ${AMOUNT_TEXT[size]}`}>
-          {formatAmount(item.amountCents)}
-        </p>
-      </div>
+    <div className="flex items-start gap-3 sm:gap-4 min-w-0 w-full">
+      <RankBadge rank={item.rank} size={size} />
+      <ProductFavicon domain={item.domain} size={isFeatured ? "xl" : "md"} />
 
-      {isCompact ? (
-        <div className="mt-1">
-          <CategoryPill category={item.category} size="sm" />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-3">
+          <p
+            className={`font-semibold text-ink truncate ${isFeatured ? "text-lg sm:text-xl" : "text-[15px] sm:text-base"}`}
+          >
+            {item.domain}
+          </p>
+          <p
+            className={`amount font-bold text-accent-dark shrink-0 ${isFeatured ? "text-lg sm:text-xl" : "text-[15px] sm:text-base"}`}
+          >
+            {formatAmount(item.amountCents)}
+          </p>
         </div>
-      ) : (
-        <>
-          <p className={`text-ink-soft ${DESCRIPTION_TEXT[size]}`}>{item.description}</p>
-          <div className="flex items-center justify-between gap-2 mt-1">
-            <CategoryPill category={item.category} size={size === "sm" ? "sm" : "md"} />
-            <SocialIconsRow socials={item.socials} size={SOCIAL_SIZE[size]} />
+
+        <p className={`text-ink-soft mt-1 ${isFeatured ? "text-sm sm:text-[15px]" : "text-sm"} ${compact ? "line-clamp-1" : "line-clamp-2"}`}>
+          {item.description}
+        </p>
+
+        <div className="flex items-center justify-between gap-3 mt-2.5 flex-wrap">
+          <div className="flex items-center gap-2 text-xs text-ink-faint min-w-0">
+            <CategoryPill category={item.category} size="sm" />
+            <span className="hidden sm:inline">&middot;</span>
+            <span className="hidden sm:inline whitespace-nowrap">{formatTimeAgo(item.createdAt)}</span>
+            <span className="hidden md:inline">&middot;</span>
+            <span className="hidden md:inline-flex items-center gap-1 whitespace-nowrap">
+              <ArrowSquareOut size={12} weight="regular" />
+              see details
+            </span>
           </div>
-        </>
-      )}
+          <SocialIconsRow socials={item.socials} size={isFeatured ? "md" : "sm"} />
+        </div>
+      </div>
     </div>
   );
 }

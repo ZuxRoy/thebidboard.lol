@@ -6,6 +6,8 @@ import mongoPlugin from "./plugins/mongo.js";
 import listingsRoutes from "./routes/listings.js";
 import webhookRoutes from "./routes/webhooks.js";
 import ogRoutes from "./routes/og.js";
+import presenceRoutes from "./routes/presence.js";
+import statsRoutes from "./routes/stats.js";
 import { env } from "./config/env.js";
 
 export async function buildApp() {
@@ -18,7 +20,13 @@ export async function buildApp() {
   });
 
   await app.register(helmet);
-  await app.register(cors, { origin: env.CORS_ORIGIN });
+  const corsOrigins = env.CORS_ORIGIN.split(",").map((origin) => origin.trim()).filter(Boolean);
+  if (env.NODE_ENV !== "production") {
+    for (const localOrigin of ["http://localhost:5173", "http://127.0.0.1:5173"]) {
+      if (!corsOrigins.includes(localOrigin)) corsOrigins.push(localOrigin);
+    }
+  }
+  await app.register(cors, { origin: corsOrigins });
   await app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
   await app.register(mongoPlugin);
 
@@ -27,6 +35,8 @@ export async function buildApp() {
   await app.register(listingsRoutes, { prefix: "/api" });
   await app.register(webhookRoutes, { prefix: "/api" });
   await app.register(ogRoutes, { prefix: "/api" });
+  await app.register(presenceRoutes, { prefix: "/api" });
+  await app.register(statsRoutes, { prefix: "/api" });
 
   return app;
 }

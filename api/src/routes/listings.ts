@@ -143,6 +143,7 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
       category: item.category,
       socials: item.socials,
       amountCents: item.totalPaid,
+      createdAt: item.createdAt,
     }));
 
     return reply.send({ items: results, total, page, limit });
@@ -160,9 +161,9 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
 
   fastify.get("/ticker", async (_request, reply) => {
     const items = await Listing.find({ status: "active" })
-      .sort({ totalPaid: -1 })
+      .sort({ createdAt: -1 })
       .limit(15)
-      .select("domain totalPaid category")
+      .select("domain totalPaid category createdAt")
       .lean();
 
     return reply.send({
@@ -170,6 +171,7 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
         domain: item.domain,
         amountCents: item.totalPaid,
         category: item.category,
+        createdAt: item.createdAt,
       })),
     });
   });

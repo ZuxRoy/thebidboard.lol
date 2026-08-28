@@ -10,13 +10,13 @@ export default function CategoryPill({ category, size = "sm" }: CategoryPillProp
   if (!meta) return null;
 
   const padding = size === "sm" ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs";
-  const iconSize = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
+  const iconSize = size === "sm" ? 12 : 13;
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-sm border-2 border-accent bg-accent/10 text-accent-dark font-semibold uppercase tracking-wide ${padding}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-soft text-ink-soft font-medium ${padding}`}
     >
-      <meta.icon className={iconSize} strokeWidth={2} />
+      <meta.icon size={iconSize} weight="regular" />
       {meta.label}
     </span>
   );

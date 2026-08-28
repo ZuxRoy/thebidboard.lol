@@ -25,6 +25,7 @@ export interface ListingRow {
   category: string;
   socials: Partial<Record<SocialPlatform, string>>;
   amountCents: number;
+  createdAt: string;
 }
 
 interface ListingsResponse {
@@ -61,7 +62,7 @@ export function useTopListing() {
 }
 
 interface TickerResponse {
-  items: Array<{ domain: string; amountCents: number; category: string }>;
+  items: Array<{ domain: string; amountCents: number; category: string; createdAt: string }>;
 }
 
 export function useTicker() {
@@ -87,5 +88,51 @@ export function useCreateListing() {
         method: "POST",
         body: JSON.stringify(payload),
       }),
+  });
+}
+
+export interface PresenceStats {
+  onlineNow: number;
+  totalVisitors: number;
+}
+
+export function usePresenceStats() {
+  return useQuery({
+    queryKey: ["presence", "stats"],
+    queryFn: ({ signal }) => apiFetch<PresenceStats>("/presence/stats", { signal }),
+    refetchInterval: 15_000,
+  });
+}
+
+export function sendHeartbeat(visitorId: string) {
+  return apiFetch<{ ok: boolean }>("/presence/heartbeat", {
+    method: "POST",
+    body: JSON.stringify({ visitorId }),
+  }).catch(() => undefined);
+}
+
+export interface CategoryStat {
+  category: string;
+  count: number;
+  volumeCents: number;
+}
+
+export interface BoardStats {
+  totalListings: number;
+  totalVolumeCents: number;
+  totalVisitors: number;
+  onlineNow: number;
+  newestDomain: string | null;
+  newestAt: string | null;
+  topDomain: string | null;
+  topAmountCents: number;
+  categories: CategoryStat[];
+}
+
+export function useBoardStats() {
+  return useQuery({
+    queryKey: ["stats"],
+    queryFn: ({ signal }) => apiFetch<BoardStats>("/stats", { signal }),
+    refetchInterval: 20_000,
   });
 }

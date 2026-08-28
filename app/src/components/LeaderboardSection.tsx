@@ -29,12 +29,12 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
   }, [data]);
 
   if (isLoading && accumulated.length === 0) {
-    return <p className="text-center text-ink-soft py-10">Loading the board…</p>;
+    return <p className="text-center text-ink-faint py-14 text-sm">Loading the board...</p>;
   }
 
   if (accumulated.length === 0) {
     return (
-      <p className="text-center text-ink-soft py-10">
+      <p className="text-center text-ink-faint py-14 text-sm">
         No spots claimed in this category yet. Be the first.
       </p>
     );
@@ -52,11 +52,18 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
     <div className="flex flex-col gap-10">
       {top3.length > 0 ? (
         <section>
-          <SectionDivider label="Top 3" />
-          <div className="flex flex-col gap-2">
-            {top3.map((item) => (
-              <ListingRow key={item.id} item={item} accent />
-            ))}
+          <div className="flex flex-col gap-2.5 sm:gap-3">
+            {top3.map((item) => {
+              const highlight = item.rank <= 3 ? (item.rank as 1 | 2 | 3) : undefined;
+              return (
+                <ListingRow
+                  key={item.id}
+                  item={item}
+                  size={item.rank === 1 ? "featured" : item.rank === 2 ? "featured" : "default"}
+                  highlight={highlight}
+                />
+              );
+            })}
           </div>
         </section>
       ) : null}
@@ -64,7 +71,7 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
       {top10.length > 0 ? (
         <section>
           <SectionDivider label="Top 10" />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             {top10.map((item) => (
               <ListingRow key={item.id} item={item} />
             ))}
@@ -75,7 +82,7 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
       {top100.length > 0 ? (
         <section>
           <SectionDivider label="Top 100" />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             {top100.map((item) => (
               <ListingRow key={item.id} item={item} />
             ))}
@@ -85,8 +92,8 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
 
       {rest.length > 0 ? (
         <section>
-          <SectionDivider label="More Listings" />
-          <div className="flex flex-col gap-2">
+          <SectionDivider label="Rest of the board" />
+          <div className="flex flex-col gap-2.5">
             {rest.map((item) => (
               <ListingRow key={item.id} item={item} />
             ))}
@@ -100,9 +107,9 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
             type="button"
             onClick={() => setPage((prev) => prev + 1)}
             disabled={isFetching}
-            className="border-2 border-ink px-6 py-2 uppercase tracking-wide text-sm font-semibold hover:bg-ink hover:text-paper transition-colors disabled:opacity-60"
+            className="rounded-full border border-border px-6 py-2.5 text-sm font-medium text-ink-soft hover:border-ink-faint hover:text-ink transition-colors disabled:opacity-60"
           >
-            {isFetching ? "Loading…" : "Load more"}
+            {isFetching ? "Loading..." : "Load more"}
           </button>
         </div>
       ) : null}
@@ -112,9 +119,11 @@ export default function LeaderboardSection({ category }: LeaderboardSectionProps
 
 function SectionDivider({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-3 mb-3">
-      <span className="headline text-lg font-bold uppercase tracking-wide">{label}</span>
-      <span className="flex-1 border-t-2 border-ink" />
+    <div className="flex items-center gap-3 mb-3.5">
+      <span className="display text-sm font-semibold uppercase tracking-wide text-ink-soft shrink-0">
+        {label}
+      </span>
+      <span className="flex-1 holo-divider" />
     </div>
   );
 }

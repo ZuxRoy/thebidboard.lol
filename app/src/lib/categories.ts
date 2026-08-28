@@ -1,24 +1,24 @@
 import {
-  LayoutGrid,
+  SquaresFour,
   Cloud,
-  Smartphone,
-  Gamepad2,
+  DeviceMobile,
+  GameController,
   Wrench,
-  Bot,
-  Search,
+  Robot,
+  MagnifyingGlass,
   Megaphone,
   Users,
   ShoppingCart,
-  Landmark,
+  Bank,
   GraduationCap,
-  Store,
+  Storefront,
   Briefcase,
-  Code2,
+  Code,
   Coins,
-  Palette,
+  PaintBrush,
   ListChecks,
-  type LucideIcon,
-} from "lucide-react";
+  type Icon,
+} from "@phosphor-icons/react";
 
 // Keep category ids in sync with api/src/services/categories.ts
 export const CATEGORY_IDS = [
@@ -47,27 +47,27 @@ export type FilterId = "all" | CategoryId;
 export interface CategoryMeta {
   id: FilterId;
   label: string;
-  icon: LucideIcon;
+  icon: Icon;
 }
 
 export const CATEGORIES: CategoryMeta[] = [
-  { id: "all", label: "All", icon: LayoutGrid },
+  { id: "all", label: "All", icon: SquaresFour },
   { id: "saas", label: "SaaS", icon: Cloud },
-  { id: "mobile-apps", label: "Mobile Apps", icon: Smartphone },
-  { id: "games", label: "Games", icon: Gamepad2 },
+  { id: "mobile-apps", label: "Mobile Apps", icon: DeviceMobile },
+  { id: "games", label: "Games", icon: GameController },
   { id: "tools-automation", label: "Tools & Automation", icon: Wrench },
-  { id: "ai-agents", label: "AI Agents", icon: Bot },
-  { id: "seo-tools", label: "SEO Tools", icon: Search },
+  { id: "ai-agents", label: "AI Agents", icon: Robot },
+  { id: "seo-tools", label: "SEO Tools", icon: MagnifyingGlass },
   { id: "marketing-sales", label: "Marketing & Sales", icon: Megaphone },
   { id: "people", label: "People", icon: Users },
   { id: "ecommerce", label: "E-Commerce", icon: ShoppingCart },
-  { id: "fintech", label: "Fintech", icon: Landmark },
+  { id: "fintech", label: "Fintech", icon: Bank },
   { id: "edtech", label: "EdTech", icon: GraduationCap },
-  { id: "marketplace", label: "Marketplace", icon: Store },
+  { id: "marketplace", label: "Marketplace", icon: Storefront },
   { id: "agencies", label: "Agencies", icon: Briefcase },
-  { id: "developer-tools", label: "Developer Tools", icon: Code2 },
+  { id: "developer-tools", label: "Developer Tools", icon: Code },
   { id: "web3-crypto", label: "Web3 & Crypto", icon: Coins },
-  { id: "design-creative", label: "Design & Creative", icon: Palette },
+  { id: "design-creative", label: "Design & Creative", icon: PaintBrush },
   { id: "productivity", label: "Productivity", icon: ListChecks },
 ];
 

@@ -1,27 +1,30 @@
 import { useState } from "react";
-import { Globe } from "lucide-react";
+import { Globe } from "@phosphor-icons/react";
 
 interface ProductFaviconProps {
   domain: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 const BOX_SIZE: Record<NonNullable<ProductFaviconProps["size"]>, string> = {
-  sm: "w-7 h-7",
-  md: "w-9 h-9",
+  sm: "w-8 h-8",
+  md: "w-10 h-10",
   lg: "w-12 h-12",
+  xl: "w-14 h-14",
 };
 
-const ICON_SIZE: Record<NonNullable<ProductFaviconProps["size"]>, string> = {
-  sm: "w-3.5 h-3.5",
-  md: "w-4 h-4",
-  lg: "w-6 h-6",
+const ICON_SIZE: Record<NonNullable<ProductFaviconProps["size"]>, number> = {
+  sm: 14,
+  md: 16,
+  lg: 20,
+  xl: 24,
 };
 
 const IMG_SIZE: Record<NonNullable<ProductFaviconProps["size"]>, number> = {
   sm: 32,
   md: 48,
   lg: 64,
+  xl: 72,
 };
 
 export default function ProductFavicon({ domain, size = "md" }: ProductFaviconProps) {
@@ -30,10 +33,10 @@ export default function ProductFavicon({ domain, size = "md" }: ProductFaviconPr
 
   return (
     <div
-      className={`${box} shrink-0 flex items-center justify-center rounded-sm border-[1.5px] border-ink bg-paper overflow-hidden`}
+      className={`${box} shrink-0 flex items-center justify-center rounded-xl border border-border bg-surface-soft overflow-hidden`}
     >
       {failed ? (
-        <Globe className={`${ICON_SIZE[size]} text-ink-soft`} strokeWidth={2} />
+        <Globe size={ICON_SIZE[size]} className="text-ink-faint" weight="regular" />
       ) : (
         <img
           src={`https://www.google.com/s2/favicons?sz=${IMG_SIZE[size]}&domain=${encodeURIComponent(domain)}`}

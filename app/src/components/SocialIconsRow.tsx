@@ -20,8 +20,8 @@ export default function SocialIconsRow({ socials, size = "sm" }: SocialIconsRowP
 
   if (entries.length === 0) return null;
 
-  const iconSize = size === "sm" ? "w-3.5 h-3.5" : size === "md" ? "w-4 h-4" : "w-5 h-5";
-  const boxSize = size === "sm" ? "w-6 h-6" : size === "md" ? "w-7 h-7" : "w-9 h-9";
+  const iconSize = size === "sm" ? "w-3 h-3" : size === "md" ? "w-3.5 h-3.5" : "w-4 h-4";
+  const boxSize = size === "sm" ? "w-6 h-6" : size === "md" ? "w-7 h-7" : "w-8 h-8";
 
   return (
     <div className="flex items-center gap-1.5">
@@ -35,7 +35,7 @@ export default function SocialIconsRow({ socials, size = "sm" }: SocialIconsRowP
             rel="noopener noreferrer"
             onClick={(event) => event.stopPropagation()}
             aria-label={platform}
-            className={`${boxSize} flex items-center justify-center rounded-full border border-ink/40 text-ink-soft hover:bg-ink hover:text-paper hover:border-ink transition-colors`}
+            className={`${boxSize} pointer-events-auto relative z-10 flex items-center justify-center rounded-full border border-border text-ink-soft hover:border-accent hover:text-accent transition-colors`}
           >
             <Icon className={iconSize} />
           </a>

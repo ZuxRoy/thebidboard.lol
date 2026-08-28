@@ -1,46 +1,59 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Playfair Display", "Georgia", serif;
-  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Fraunces", "Iowan Old Style", "Georgia", serif;
+  --font-body: "Sora", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
 
-  --color-paper: #f4ecd8;
-  --color-paper-dark: #e8dcc0;
-  --color-ink: #1a1512;
-  --color-ink-soft: #4a4038;
-  --color-rule: #1a1512;
-  --color-accent: #b7291e;
-  --color-accent-dark: #8c1f16;
-  --color-gold: #a8842a;
+  /* Base surfaces — warm off-white, never pure white */
+  --color-bg: #faf8f4;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f3f0e9;
+  --color-ink: #171522;
+  --color-ink-soft: #656074;
+  --color-ink-faint: #8b869a;
+  --color-border: #e6e1d5;
+  --color-border-strong: #d5cebd;
+
+  /* Primary accent — warm amber, kept out of neon territory */
+  --color-accent: #b3730f;
+  --color-accent-dark: #8a5709;
+  --color-accent-soft: #fbeed7;
+
+  /* Two-tone holographic backlight: brand amber + a single muted violet */
+  --color-holo-2: #8b5cf6;
+
+  /* Rank tier colors */
+  --color-rank-gold: #caa23a;
+  --color-rank-silver: #9aa0ac;
+  --color-rank-bronze: #bf7f4f;
 }
 
 @layer base {
   html {
-    background-color: var(--color-paper);
+    background-color: var(--color-bg);
   }
 
   body {
     font-family: var(--font-body);
     color: var(--color-ink);
-    background-color: var(--color-paper);
+    background-color: var(--color-bg);
     background-image:
-      radial-gradient(rgba(26, 21, 18, 0.05) 1px, transparent 1px),
-      radial-gradient(rgba(26, 21, 18, 0.03) 1px, transparent 1px);
-    background-size: 3px 3px, 7px 7px;
-    background-position: 0 0, 2px 3px;
+      linear-gradient(to right, rgba(23, 21, 34, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(23, 21, 34, 0.035) 1px, transparent 1px);
+    background-size: 34px 34px;
   }
 
   ::selection {
-    background-color: var(--color-accent);
-    color: var(--color-paper);
+    background-color: var(--color-accent-soft);
+    color: var(--color-ink);
   }
 }
 
 @layer components {
-  .headline {
+  .display {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
 
   .amount {
@@ -48,23 +61,21 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .rule {
-    border-color: var(--color-rule);
+  .surface-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 1.25rem;
   }
 
-  .rule-thick {
-    border-color: var(--color-rule);
-    border-width: 3px 0 0 0;
-  }
-
-  .newsprint-card {
-    background-color: var(--color-paper);
-    border: 1.5px solid var(--color-ink);
-    box-shadow: 3px 3px 0 0 var(--color-ink);
-  }
-
-  .accent-shadow-card {
-    box-shadow: 3px 3px 0 0 var(--color-accent);
+  .claim-surface {
+    background: linear-gradient(
+      135deg,
+      #ffffff 0%,
+      var(--color-accent-soft) 52%,
+      color-mix(in srgb, var(--color-holo-2) 14%, white) 100%
+    );
+    border: 1px solid var(--color-border);
+    border-radius: 1.25rem;
   }
 
   .scrollbar-hide {
@@ -74,6 +85,90 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Soft two-tone backlight sitting behind the card, not a rainbow edge ring. */
+  .holo-glow {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .holo-glow::before {
+    content: "";
+    position: absolute;
+    inset: -24px;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      ellipse at 30% 20%,
+      var(--color-holo-2) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      var(--color-accent) 0%,
+      transparent 55%
+    );
+    filter: blur(44px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .holo-glow:hover::before {
+    opacity: 0.3;
+  }
+
+  .holo-glow-fixed::before {
+    opacity: 0.38;
+  }
+
+  .holo-glow-fixed:hover::before {
+    opacity: 0.46;
+  }
+
+  .holo-glow-rank-1::before {
+    opacity: 0.34;
+  }
+
+  .holo-glow-rank-1:hover::before {
+    opacity: 0.44;
+  }
+
+  .holo-glow-rank-2::before {
+    opacity: 0.2;
+  }
+
+  .holo-glow-rank-2:hover::before {
+    opacity: 0.32;
+  }
+
+  .holo-glow-rank-3::before {
+    opacity: 0.12;
+  }
+
+  .holo-glow-rank-3:hover::before {
+    opacity: 0.26;
+  }
+
+  .holo-ring {
+    background: linear-gradient(
+      90deg,
+      var(--color-holo-2),
+      var(--color-accent)
+    );
+  }
+
+  .holo-divider {
+    height: 1px;
+    opacity: 0.45;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-holo-2) 30%,
+      var(--color-accent) 70%,
+      transparent
+    );
   }
 }
 
@@ -111,5 +206,5 @@
 }
 
 .animate-marquee {
-  animation: marquee 32s linear infinite;
+  animation: marquee 34s linear infinite;
 }
