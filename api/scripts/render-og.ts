@@ -32,277 +32,221 @@ async function loadFonts(): Promise<SatoriFont[]> {
   );
 }
 
-function rankCard(rank: 1 | 2 | 3) {
-  const meta = {
-    1: { label: "TOP SPOT", amount: "$99+", border: "#caa23a", bg: "#fffdf8", width: 280, height: 196 },
-    2: { label: "CHASING", amount: "OUTBID", border: "#9aa0ac", bg: "#ffffff", width: 200, height: 148 },
-    3: { label: "CLIMBING", amount: "BID UP", border: "#bf7f4f", bg: "#ffffff", width: 200, height: 148 },
-  }[rank];
-
-  return {
-    type: "div",
-    props: {
-      style: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        width: meta.width,
-        height: meta.height,
-        backgroundColor: meta.bg,
-        border: `2px solid ${meta.border}`,
-        borderRadius: 22,
-        padding: rank === 1 ? "22px 24px" : "16px 18px",
-      },
-      children: [
-        {
-          type: "div",
-          props: {
-            style: {
-              display: "flex",
-              fontFamily: "JetBrains Mono",
-              fontSize: rank === 1 ? 18 : 14,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              color: rank === 1 ? "#8a5709" : "#8b869a",
-            },
-            children: `#${rank}`,
-          },
-        },
-        {
-          type: "div",
-          props: {
-            style: {
-              display: "flex",
-              flexDirection: "column",
-              gap: 6,
-            },
-            children: [
-              {
-                type: "div",
-                props: {
-                  style: {
-                    display: "flex",
-                    fontFamily: "Fraunces",
-                    fontSize: rank === 1 ? 28 : 20,
-                    fontWeight: 600,
-                    color: "#171522",
-                  },
-                  children: meta.label,
-                },
-              },
-              {
-                type: "div",
-                props: {
-                  style: {
-                    display: "flex",
-                    fontFamily: "JetBrains Mono",
-                    fontSize: rank === 1 ? 22 : 16,
-                    fontWeight: 700,
-                    color: "#b3730f",
-                  },
-                  children: meta.amount,
-                },
-              },
-            ],
-          },
-        },
-      ],
-    },
-  };
+function node(style: Record<string, unknown>, children?: unknown) {
+  return { type: "div", props: { style: { display: "flex", ...style }, children } };
 }
 
-const tree = {
-  type: "div",
-  props: {
-    style: {
-      width: WIDTH,
-      height: HEIGHT,
-      display: "flex",
-      position: "relative",
-      overflow: "hidden",
-      backgroundColor: "#faf8f4",
-      fontFamily: "Sora",
+function text(style: Record<string, unknown>, children: string) {
+  return node(style, children);
+}
+
+function podiumBar(rank: string, height: number, width: number, border: string, fill: string, ink: string) {
+  return node(
+    {
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      width,
+      height,
+      backgroundColor: fill,
+      border: `2px solid ${border}`,
+      borderRadius: 20,
+      paddingBottom: 18,
     },
-    children: [
-      {
-        type: "div",
-        props: {
-          style: {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            backgroundImage:
-              "linear-gradient(to right, rgba(23,21,34,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(23,21,34,0.05) 1px, transparent 1px)",
-            backgroundSize: "34px 34px",
-          },
+    [
+      text(
+        {
+          fontFamily: "Fraunces",
+          fontSize: rank === "1" ? 52 : 34,
+          fontWeight: 600,
+          color: ink,
+          letterSpacing: "-0.04em",
         },
-      },
-      {
-        type: "div",
-        props: {
-          style: {
-            position: "absolute",
-            display: "flex",
-            width: 540,
-            height: 540,
-            borderRadius: 999,
-            backgroundColor: "rgba(139, 92, 246, 0.3)",
-            top: -190,
-            left: -120,
-          },
-        },
-      },
-      {
-        type: "div",
-        props: {
-          style: {
-            position: "absolute",
-            display: "flex",
-            width: 580,
-            height: 580,
-            borderRadius: 999,
-            backgroundColor: "rgba(179, 115, 15, 0.34)",
-            bottom: -220,
-            right: -80,
-          },
-        },
-      },
-      {
-        type: "div",
-        props: {
-          style: {
-            position: "absolute",
-            display: "flex",
-            width: 280,
-            height: 280,
-            borderRadius: 999,
-            backgroundColor: "rgba(139, 92, 246, 0.18)",
-            bottom: 40,
-            left: 420,
-          },
-        },
-      },
-      {
-        type: "div",
-        props: {
-          style: {
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "64px 72px",
-          },
-          children: [
-            {
-              type: "div",
-              props: {
-                style: {
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  height: "100%",
-                  width: 560,
-                },
-                children: [
-                  {
-                    type: "div",
-                    props: {
-                      style: {
-                        display: "flex",
-                        fontFamily: "Fraunces",
-                        fontSize: 42,
-                        fontWeight: 600,
-                        color: "#171522",
-                        letterSpacing: "-0.03em",
-                      },
-                      children: "TheBidBoard",
-                    },
-                  },
-                  {
-                    type: "div",
-                    props: {
-                      style: { display: "flex", flexDirection: "column", gap: 18 },
-                      children: [
-                        {
-                          type: "div",
-                          props: {
-                            style: {
-                              display: "flex",
-                              fontFamily: "Fraunces",
-                              fontSize: 58,
-                              fontWeight: 600,
-                              color: "#171522",
-                              lineHeight: 1.05,
-                              letterSpacing: "-0.03em",
-                            },
-                            children: "Pay to own #1.",
-                          },
-                        },
-                        {
-                          type: "div",
-                          props: {
-                            style: {
-                              display: "flex",
-                              fontSize: 26,
-                              fontWeight: 500,
-                              color: "#656074",
-                              lineHeight: 1.35,
-                              maxWidth: 480,
-                            },
-                            children: "The public product leaderboard. Highest bid keeps the crown.",
-                          },
-                        },
-                      ],
-                    },
-                  },
-                  {
-                    type: "div",
-                    props: {
-                      style: {
-                        display: "flex",
-                        fontFamily: "JetBrains Mono",
-                        fontSize: 18,
-                        fontWeight: 700,
-                        color: "#8a5709",
-                      },
-                      children: "thebidboard.lol",
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              type: "div",
-              props: {
-                style: {
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-end",
-                  gap: 16,
-                },
-                children: [
-                  rankCard(1),
-                  {
-                    type: "div",
-                    props: {
-                      style: { display: "flex", flexDirection: "row", gap: 14 },
-                      children: [rankCard(2), rankCard(3)],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      },
-    ],
+        `#${rank}`
+      ),
+    ]
+  );
+}
+
+const tree = node(
+  {
+    width: WIDTH,
+    height: HEIGHT,
+    position: "relative",
+    overflow: "hidden",
+    backgroundColor: "#faf8f4",
+    fontFamily: "Sora",
   },
-};
+  [
+    node({
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundImage:
+        "linear-gradient(to right, rgba(23,21,34,0.045) 1px, transparent 1px), linear-gradient(to bottom, rgba(23,21,34,0.045) 1px, transparent 1px)",
+      backgroundSize: "34px 34px",
+    }),
+    node({
+      position: "absolute",
+      width: 560,
+      height: 560,
+      borderRadius: 999,
+      backgroundColor: "rgba(139, 92, 246, 0.28)",
+      top: -200,
+      left: -140,
+    }),
+    node({
+      position: "absolute",
+      width: 620,
+      height: 620,
+      borderRadius: 999,
+      backgroundColor: "rgba(179, 115, 15, 0.32)",
+      bottom: -260,
+      right: -160,
+    }),
+    node({
+      position: "absolute",
+      width: 260,
+      height: 260,
+      borderRadius: 999,
+      backgroundColor: "rgba(139, 92, 246, 0.16)",
+      top: 220,
+      left: 520,
+    }),
+    node(
+      {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 52,
+        alignItems: "center",
+        paddingLeft: 40,
+        paddingRight: 40,
+        backgroundColor: "#171522",
+        gap: 22,
+      },
+      [
+        node({ alignItems: "center", gap: 10 }, [
+          node({
+            width: 8,
+            height: 8,
+            borderRadius: 999,
+            backgroundColor: "#b3730f",
+          }),
+          text(
+            {
+              fontSize: 13,
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "#ffffff",
+            },
+            "Live board"
+          ),
+        ]),
+        text({ fontSize: 14, fontWeight: 500, color: "rgba(255,255,255,0.72)" }, "Pay to claim #1"),
+        text({ fontSize: 14, fontWeight: 500, color: "rgba(255,255,255,0.72)" }, "Highest bid keeps the spot"),
+        text({ fontFamily: "JetBrains Mono", fontSize: 13, fontWeight: 700, color: "#fbeed7" }, "thebidboard.lol"),
+      ]
+    ),
+    node(
+      {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        paddingTop: 52,
+        paddingLeft: 72,
+        paddingRight: 64,
+        paddingBottom: 56,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+      },
+      [
+        node(
+          {
+            flexDirection: "column",
+            justifyContent: "center",
+            width: 620,
+            gap: 28,
+          },
+          [
+            text(
+              {
+                fontFamily: "Fraunces",
+                fontSize: 78,
+                fontWeight: 600,
+                color: "#171522",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              },
+              "TheBidBoard"
+            ),
+            text(
+              {
+                fontSize: 28,
+                fontWeight: 500,
+                color: "#656074",
+                lineHeight: 1.4,
+                maxWidth: 560,
+              },
+              "A public leaderboard where products bid to sit at #1. Highest bid keeps the crown."
+            ),
+          ]
+        ),
+        node(
+          {
+            width: 380,
+            height: 430,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "#ffffff",
+            border: "1px solid #e6e1d5",
+            borderRadius: 28,
+            paddingTop: 36,
+            paddingBottom: 28,
+            paddingLeft: 28,
+            paddingRight: 28,
+          },
+          [
+            node({ flexDirection: "column", alignItems: "center", gap: 8 }, [
+              text(
+                {
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "#8b869a",
+                },
+                "Top of the board"
+              ),
+              text(
+                {
+                  fontFamily: "Fraunces",
+                  fontSize: 118,
+                  fontWeight: 600,
+                  color: "#8a5709",
+                  letterSpacing: "-0.05em",
+                  lineHeight: 1,
+                },
+                "#1"
+              ),
+            ]),
+            node({ flexDirection: "row", alignItems: "flex-end", gap: 14 }, [
+              podiumBar("2", 118, 92, "#9aa0ac", "#ffffff", "#656074"),
+              podiumBar("1", 168, 112, "#caa23a", "#fffdf8", "#8a5709"),
+              podiumBar("3", 96, 92, "#bf7f4f", "#ffffff", "#bf7f4f"),
+            ]),
+          ]
+        ),
+      ]
+    ),
+  ]
+);
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const outPath = path.resolve(here, "../../app/public/og.png");
