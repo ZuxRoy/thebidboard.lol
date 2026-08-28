@@ -57,7 +57,7 @@ export default function ListingRow({
         target="_blank"
         rel="noopener noreferrer"
         className="absolute inset-0 z-0 rounded-[inherit]"
-        aria-label={`${item.domain} details`}
+        aria-label={`${item.displayName || item.domain} details`}
       />
       <div className="relative z-10 pointer-events-none">
         <ProductCardContent item={item} size={size} compact={compact || embedded} />

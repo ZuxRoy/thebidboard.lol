@@ -19,24 +19,121 @@ export function isValidSocialUrl(platform: SocialPlatform, url: string): boolean
   return SOCIAL_PATTERNS[platform].test(url.trim());
 }
 
-export function isLikelyUrl(value: string): boolean {
+const X_HOSTS = new Set(["x.com", "twitter.com"]);
+const X_HANDLE_RE = /^[A-Za-z0-9_]{1,15}$/;
+const X_RESERVED_PATHS = new Set([
+  "about",
+  "account",
+  "ads",
+  "analytics",
+  "bookmark",
+  "bookmarks",
+  "business",
+  "communities",
+  "community",
+  "communitynotes",
+  "compose",
+  "developers",
+  "download",
+  "embed",
+  "explore",
+  "flow",
+  "follow",
+  "followers",
+  "following",
+  "grok",
+  "hashtag",
+  "help",
+  "home",
+  "i",
+  "intent",
+  "jobs",
+  "lists",
+  "login",
+  "logout",
+  "messages",
+  "moments",
+  "notifications",
+  "oauth",
+  "premium",
+  "privacy",
+  "rules",
+  "safety",
+  "search",
+  "settings",
+  "share",
+  "signin",
+  "signup",
+  "status",
+  "tos",
+  "tweet",
+  "tweets",
+  "welcome",
+  "widgets",
+]);
+
+export const X_PROFILE_URL_HINT = "Enter a profile URL like https://x.com/yourhandle";
+
+function parseXProfileHandle(pathname: string): string | null {
+  const segment = pathname.split("/").filter(Boolean)[0] ?? "";
+  if (!segment) return null;
+  if (X_RESERVED_PATHS.has(segment.toLowerCase())) return null;
+  if (!X_HANDLE_RE.test(segment)) return null;
+  return segment;
+}
+
+function parseProductUrl(value: string): URL | null {
   const candidate = /^https?:\/\//i.test(value) ? value : `https://${value}`;
   try {
-    const url = new URL(candidate);
-    return url.hostname.includes(".");
+    return new URL(candidate);
   } catch {
-    return false;
+    return null;
   }
 }
 
-export function extractDomain(value: string): string {
-  const candidate = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-  try {
-    const url = new URL(candidate);
-    return url.hostname.replace(/^www\./, "");
-  } catch {
-    return value;
+export function xProfileHandleFromUrl(value: string): string | null {
+  const parsed = parseProductUrl(value);
+  if (!parsed) return null;
+  const hostname = parsed.hostname.toLowerCase().replace(/^www\./, "");
+  if (!X_HOSTS.has(hostname)) return null;
+  return parseXProfileHandle(parsed.pathname);
+}
+
+export function xProfileHandleFromDomain(domain: string): string | null {
+  if (!domain.startsWith("x.com/")) return null;
+  const handle = domain.slice("x.com/".length);
+  return parseXProfileHandle(`/${handle}`);
+}
+
+export function listingIconSrc(url: string, domain: string, size: number): string | null {
+  const handle = xProfileHandleFromUrl(url) ?? xProfileHandleFromDomain(domain);
+  if (handle) {
+    return `https://unavatar.io/x/${encodeURIComponent(handle)}?fallback=false`;
   }
+  const hostname = domain.split("/")[0];
+  if (hostname === "x.com" || hostname === "twitter.com") {
+    return null;
+  }
+  return `https://www.google.com/s2/favicons?sz=${size}&domain=${encodeURIComponent(hostname)}`;
+}
+
+export function isXProductUrlMissingHandle(value: string): boolean {
+  const parsed = parseProductUrl(value);
+  if (!parsed) return false;
+  const hostname = parsed.hostname.toLowerCase().replace(/^www\./, "");
+  if (!X_HOSTS.has(hostname)) return false;
+  return parseXProfileHandle(parsed.pathname) === null;
+}
+
+export function isLikelyUrl(value: string): boolean {
+  const parsed = parseProductUrl(value);
+  return Boolean(parsed?.hostname.includes("."));
+}
+
+export function extractDomain(value: string): string {
+  const parsed = parseProductUrl(value);
+  if (!parsed) return value;
+  return parsed.hostname.replace(/^www\./, "");
 }
 
 export function formatAmount(cents: number): string {

@@ -5,7 +5,7 @@ import SocialLinkButton from "./SocialLinkButton";
 import ListingRow from "./ListingRow";
 import { ListingRowSkeleton } from "./Skeleton";
 import { CATEGORY_FORM_OPTIONS, type CategoryId } from "../lib/categories";
-import { isLikelyUrl, formatAmount, type SocialPlatform } from "../lib/validators";
+import { isLikelyUrl, isXProductUrlMissingHandle, X_PROFILE_URL_HINT, formatAmount, type SocialPlatform } from "../lib/validators";
 import { useCreateListing, useListings, useTopListing } from "../lib/api";
 
 const DESCRIPTION_LIMIT = 100;
@@ -44,6 +44,10 @@ export default function EntrySection() {
 
     if (!isLikelyUrl(url)) {
       setFormError("Enter a valid product URL");
+      return;
+    }
+    if (isXProductUrlMissingHandle(url)) {
+      setFormError(X_PROFILE_URL_HINT);
       return;
     }
     if (!description.trim()) {

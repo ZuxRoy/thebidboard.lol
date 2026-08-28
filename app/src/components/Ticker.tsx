@@ -49,7 +49,7 @@ export default function Ticker() {
                 className="inline-flex items-center gap-2 text-xs px-5 border-r border-white/10 text-white/70"
               >
                 {meta ? <meta.icon size={13} weight="regular" /> : null}
-                <span className="font-semibold text-white">{item.domain}</span>
+                <span className="font-semibold text-white">{item.displayName || item.domain}</span>
                 <span className="amount text-accent-soft">{formatAmount(item.amountCents)}</span>
                 <span className="text-white/40">{formatTimeAgo(item.createdAt)}</span>
               </span>

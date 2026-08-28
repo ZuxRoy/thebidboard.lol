@@ -2,7 +2,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 import { Listing } from "../models/Listing.js";
 import { PaymentIntent } from "../models/PaymentIntent.js";
-import { normalizeDomain, isValidSocialUrl, InvalidUrlError } from "../services/domain.js";
+import { normalizeDomain, listingDisplayName, isValidSocialUrl, InvalidUrlError } from "../services/domain.js";
 import { isCategoryId } from "../services/categories.js";
 import { createProduct, createCheckoutSession } from "../services/pocketsflow.js";
 
@@ -42,10 +42,12 @@ async function handleCreateListing(fastify: FastifyInstance, request: FastifyReq
 
   let domain: string;
   let normalizedUrl: string;
+  let displayName: string;
   try {
     const result = normalizeDomain(parsed.data.url);
     domain = result.domain;
     normalizedUrl = result.url;
+    displayName = result.displayName;
   } catch (err) {
     if (err instanceof InvalidUrlError) {
       return reply.status(400).send({ error: err.message });
@@ -76,7 +78,7 @@ async function handleCreateListing(fastify: FastifyInstance, request: FastifyReq
   try {
     const paymentIntentId = paymentIntent._id.toString();
     const productId = await createProduct({
-      name: `Board Spot — ${domain}`,
+      name: `Board Spot — ${displayName}`,
       priceDollars: amountCents / 100,
     });
     const { checkoutId, checkoutUrl } = await createCheckoutSession({
@@ -141,6 +143,7 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
       id: item._id.toString(),
       rank: offset + index + 1,
       domain: item.domain,
+      displayName: listingDisplayName(item.url, item.domain),
       url: item.url,
       description: item.description,
       category: item.category,
@@ -164,7 +167,7 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
     return reply.send({
       topAmountCents,
       nextAmountCents: topAmountCents + 100,
-      topDomain: top?.domain ?? null,
+      topDomain: top ? listingDisplayName(top.url, top.domain) : null,
     });
   });
 
@@ -172,12 +175,13 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
     const items = await Listing.find({ status: "active" })
       .sort({ createdAt: -1 })
       .limit(15)
-      .select("domain totalPaid category createdAt")
+      .select("domain url totalPaid category createdAt")
       .lean();
 
     return reply.send({
       items: items.map((item) => ({
         domain: item.domain,
+        displayName: listingDisplayName(item.url, item.domain),
         amountCents: item.totalPaid,
         category: item.category,
         createdAt: item.createdAt,

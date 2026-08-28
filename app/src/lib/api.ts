@@ -20,6 +20,7 @@ export interface ListingRow {
   id: string;
   rank: number;
   domain: string;
+  displayName: string;
   url: string;
   description: string;
   category: string;
@@ -63,7 +64,7 @@ export function useTopListing() {
 }
 
 interface TickerResponse {
-  items: Array<{ domain: string; amountCents: number; category: string; createdAt: string }>;
+  items: Array<{ domain: string; displayName: string; amountCents: number; category: string; createdAt: string }>;
 }
 
 export function useTicker() {

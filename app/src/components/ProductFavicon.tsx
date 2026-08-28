@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Globe } from "@phosphor-icons/react";
+import { listingIconSrc, xProfileHandleFromDomain, xProfileHandleFromUrl } from "../lib/validators";
 
 interface ProductFaviconProps {
   domain: string;
+  url?: string;
   size?: "sm" | "md" | "lg" | "xl";
 }
 
@@ -27,23 +29,29 @@ const IMG_SIZE: Record<NonNullable<ProductFaviconProps["size"]>, number> = {
   xl: 72,
 };
 
-export default function ProductFavicon({ domain, size = "md" }: ProductFaviconProps) {
+export default function ProductFavicon({ domain, url = "", size = "md" }: ProductFaviconProps) {
   const [failed, setFailed] = useState(false);
   const box = BOX_SIZE[size];
+  const src = listingIconSrc(url, domain, IMG_SIZE[size]);
+  const isAvatar = Boolean(xProfileHandleFromUrl(url) ?? xProfileHandleFromDomain(domain));
+
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
 
   return (
     <div
       className={`${box} shrink-0 flex items-center justify-center rounded-xl border border-border bg-surface-soft overflow-hidden`}
     >
-      {failed ? (
+      {failed || !src ? (
         <Globe size={ICON_SIZE[size]} className="text-ink-faint" weight="regular" />
       ) : (
         <img
-          src={`https://www.google.com/s2/favicons?sz=${IMG_SIZE[size]}&domain=${encodeURIComponent(domain)}`}
+          src={src}
           alt=""
           width={IMG_SIZE[size]}
           height={IMG_SIZE[size]}
-          className="w-3/4 h-3/4 object-contain"
+          className={isAvatar ? "w-full h-full object-cover" : "w-3/4 h-3/4 object-contain"}
           onError={() => setFailed(true)}
         />
       )}

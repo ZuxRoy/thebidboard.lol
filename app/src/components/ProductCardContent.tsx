@@ -20,14 +20,14 @@ export default function ProductCardContent({ item, size = "default", compact = f
   return (
     <div className="flex items-start gap-3 sm:gap-4 min-w-0 w-full">
       <RankBadge rank={item.rank} size={size} />
-      <ProductFavicon domain={item.domain} size={isFeatured ? "xl" : "md"} />
+      <ProductFavicon domain={item.domain} url={item.url} size={isFeatured ? "xl" : "md"} />
 
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-3">
           <p
             className={`font-semibold text-ink truncate ${isFeatured ? "text-lg sm:text-xl" : "text-[15px] sm:text-base"}`}
           >
-            {item.domain}
+            {item.displayName || item.domain}
           </p>
           <p
             className={`amount font-bold text-accent-dark shrink-0 ${isFeatured ? "text-lg sm:text-xl" : "text-[15px] sm:text-base"}`}
