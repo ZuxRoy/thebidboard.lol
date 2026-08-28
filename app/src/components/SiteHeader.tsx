@@ -12,14 +12,16 @@ export default function SiteHeader() {
 
   return (
     <header className="border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
-        <Link to="/" className="display text-xl font-semibold text-ink shrink-0">
+      <div className="relative max-w-6xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2 sm:gap-3">
+        <Link to="/" className="relative z-10 display text-lg sm:text-xl font-semibold text-ink shrink-0">
           TheBidBoard
         </Link>
-        <div className="flex-1 flex justify-center min-w-0">
-          <PresenceBar />
+        <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none">
+          <div className="pointer-events-auto min-w-0 px-2">
+            <PresenceBar />
+          </div>
         </div>
-        <nav className="flex items-center gap-3 sm:gap-5 text-sm font-medium text-ink-soft shrink-0">
+        <nav className="relative z-10 flex items-center gap-2 sm:gap-5 text-[13px] sm:text-sm font-medium text-ink-soft shrink-0">
           <Link to="/#leaderboard" onClick={goToLeaderboard} className="hover:text-ink transition-colors">
             Leaderboard
           </Link>
@@ -28,11 +30,17 @@ export default function SiteHeader() {
           </Link>
           <Link
             to="/#claim"
-            className="rounded-full bg-ink text-surface px-3 sm:px-4 py-1.5 hover:bg-accent-dark transition-colors"
+            className="rounded-full bg-ink text-surface px-3 sm:px-4 py-1.5 hover:bg-accent-dark transition-colors whitespace-nowrap"
           >
-            Claim a spot
+            <span className="sm:hidden">Claim</span>
+            <span className="hidden sm:inline">Claim a spot</span>
           </Link>
         </nav>
+      </div>
+      <div className="md:hidden border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 py-2 flex justify-center">
+          <PresenceBar />
+        </div>
       </div>
     </header>
   );

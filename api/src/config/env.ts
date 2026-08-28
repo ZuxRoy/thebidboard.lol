@@ -9,6 +9,8 @@ const envSchema = z.object({
   APP_BASE_URL: z.string().default("http://localhost:5173"),
   POCKETSFLOW_API_KEY: z.string().min(1, "POCKETSFLOW_API_KEY is required"),
   POCKETSFLOW_WEBHOOK_SECRET: z.string().min(1, "POCKETSFLOW_WEBHOOK_SECRET is required"),
+  CLOUDFLARE_API_TOKEN: z.string().optional(),
+  CLOUDFLARE_ZONE_ID: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

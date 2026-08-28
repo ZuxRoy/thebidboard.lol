@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { Listing } from "../models/Listing.js";
 import { Visitor } from "../models/Visitor.js";
+import { getCloudflareTraffic } from "../services/cloudflareAnalytics.js";
 
 const ONLINE_WINDOW_MS = 75_000;
 
@@ -8,7 +9,7 @@ export default async function statsRoutes(fastify: FastifyInstance) {
   fastify.get("/stats", async (_request, reply) => {
     const onlineSince = new Date(Date.now() - ONLINE_WINDOW_MS);
 
-    const [totals, byCategory, newest, top, onlineNow, totalVisitors] = await Promise.all([
+    const [totals, byCategory, newest, top, onlineNow, cloudflare] = await Promise.all([
       Listing.aggregate([
         { $match: { status: "active" } },
         { $group: { _id: null, totalListings: { $sum: 1 }, totalVolumeCents: { $sum: "$totalPaid" } } },
@@ -21,7 +22,7 @@ export default async function statsRoutes(fastify: FastifyInstance) {
       Listing.findOne({ status: "active" }).sort({ createdAt: -1 }).select("domain createdAt").lean(),
       Listing.findOne({ status: "active" }).sort({ totalPaid: -1 }).select("domain totalPaid").lean(),
       Visitor.countDocuments({ lastSeenAt: { $gte: onlineSince } }),
-      Visitor.countDocuments({}),
+      getCloudflareTraffic(fastify.log),
     ]);
 
     const totalListings = totals[0]?.totalListings ?? 0;
@@ -30,7 +31,8 @@ export default async function statsRoutes(fastify: FastifyInstance) {
     return reply.send({
       totalListings,
       totalVolumeCents,
-      totalVisitors,
+      totalClicks: cloudflare?.clicks ?? 0,
+      clicksSeries: cloudflare?.series ?? [],
       onlineNow,
       newestDomain: newest?.domain ?? null,
       newestAt: newest?.createdAt ?? null,

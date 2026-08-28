@@ -127,6 +127,17 @@
     opacity: 0.46;
   }
 
+  .holo-glow-stage::before {
+    inset: -52px -36px;
+    filter: blur(64px);
+    opacity: 0.42;
+    border-radius: 3rem;
+  }
+
+  .holo-glow-stage:hover::before {
+    opacity: 0.48;
+  }
+
   .holo-glow-rank-1::before {
     opacity: 0.34;
   }

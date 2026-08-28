@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { Visitor } from "../models/Visitor.js";
+import { getCloudflareTraffic } from "../services/cloudflareAnalytics.js";
 
 const ONLINE_WINDOW_MS = 75_000;
 
@@ -31,11 +32,14 @@ export default async function presenceRoutes(fastify: FastifyInstance) {
 
   fastify.get("/presence/stats", async (_request, reply) => {
     const onlineSince = new Date(Date.now() - ONLINE_WINDOW_MS);
-    const [onlineNow, totalVisitors] = await Promise.all([
+    const [onlineNow, cloudflare] = await Promise.all([
       Visitor.countDocuments({ lastSeenAt: { $gte: onlineSince } }),
-      Visitor.countDocuments({}),
+      getCloudflareTraffic(fastify.log),
     ]);
 
-    return reply.send({ onlineNow, totalVisitors });
+    return reply.send({
+      onlineNow,
+      totalClicks: cloudflare?.clicks ?? 0,
+    });
   });
 }

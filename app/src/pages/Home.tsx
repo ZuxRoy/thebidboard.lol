@@ -24,7 +24,7 @@ export default function Home() {
         className="px-4 sm:px-6 pb-14 flex flex-col gap-4 max-w-6xl mx-auto w-full scroll-mt-16"
       >
         <CategoryFilterBar value={filter} onChange={setFilter} />
-        <LeaderboardSection category={filter} />
+        <LeaderboardSection key={filter} category={filter} />
       </section>
 
       <Footer />

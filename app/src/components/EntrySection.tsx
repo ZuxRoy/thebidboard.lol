@@ -3,6 +3,7 @@ import { FaInstagram, FaLinkedin, FaTiktok, FaXTwitter } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import SocialLinkButton from "./SocialLinkButton";
 import ListingRow from "./ListingRow";
+import { ListingRowSkeleton } from "./Skeleton";
 import { CATEGORY_FORM_OPTIONS, type CategoryId } from "../lib/categories";
 import { isLikelyUrl, formatAmount, type SocialPlatform } from "../lib/validators";
 import { useCreateListing, useListings, useTopListing } from "../lib/api";
@@ -27,8 +28,8 @@ export default function EntrySection() {
   const urlInputRef = useRef<HTMLInputElement>(null);
 
   const createListing = useCreateListing();
-  const { data: topListing } = useTopListing();
-  const { data: allTimeTop } = useListings("all", 1, 3);
+  const { data: topListing, isLoading: topLoading } = useTopListing();
+  const { data: allTimeTop, isLoading: leadersLoading } = useListings("all", 1, 3);
   const nextAmountCents = topListing?.nextAmountCents ?? 100;
   const allTimeLeaders = allTimeTop?.items ?? [];
 
@@ -79,7 +80,13 @@ export default function EntrySection() {
             onClick={() => pickAmount(nextAmountCents)}
             className="amount text-accent-dark hover:text-accent transition-colors"
           >
-            {formatAmount(nextAmountCents)}
+            {topLoading ? (
+              <span className="inline-block align-middle">
+                <span className="inline-block h-8 w-20 rounded-md bg-black/[0.06] animate-pulse" />
+              </span>
+            ) : (
+              formatAmount(nextAmountCents)
+            )}
           </button>
         </h1>
       </div>
@@ -164,7 +171,7 @@ export default function EntrySection() {
                     step="1"
                     value={amount}
                     onChange={(event) => setAmount(event.target.value)}
-                    placeholder="5"
+                    placeholder={String(nextAmountCents / 100)}
                     className="w-full rounded-xl border border-border bg-white/70 px-3.5 py-2 text-sm amount focus:outline-none focus:border-accent"
                   />
                 </div>
@@ -186,7 +193,13 @@ export default function EntrySection() {
               <Crown size={14} weight="fill" className="text-rank-gold" />
               <p className="text-[11px] font-medium uppercase tracking-wide text-ink-faint">All-time top 3</p>
             </div>
-            {allTimeLeaders.length > 0 ? (
+            {leadersLoading ? (
+              <div className="flex flex-col gap-2">
+                <ListingRowSkeleton compact />
+                <ListingRowSkeleton compact />
+                <ListingRowSkeleton compact />
+              </div>
+            ) : allTimeLeaders.length > 0 ? (
               <div className="flex flex-col gap-2">
                 {allTimeLeaders.map((item) => {
                   const highlight = item.rank <= 3 ? (item.rank as 1 | 2 | 3) : undefined;

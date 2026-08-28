@@ -106,7 +106,8 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
 
   const listQuerySchema = z.object({
     category: z.string().optional(),
-    page: z.coerce.number().int().min(1).default(1),
+    page: z.coerce.number().int().min(1).optional(),
+    offset: z.coerce.number().int().min(0).optional(),
     limit: z.coerce.number().int().min(1).max(100).default(20),
   });
 
@@ -115,7 +116,9 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
     if (!parsed.success) {
       return reply.status(400).send({ error: "Invalid query parameters" });
     }
-    const { category, page, limit } = parsed.data;
+    const { category, limit } = parsed.data;
+    const offset = parsed.data.offset ?? ((parsed.data.page ?? 1) - 1) * limit;
+    const page = Math.floor(offset / limit) + 1;
 
     const filter: Record<string, unknown> = { status: "active" };
     if (category && category !== "all") {
@@ -128,7 +131,7 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
     const [items, total] = await Promise.all([
       Listing.find(filter)
         .sort({ totalPaid: -1, createdAt: 1 })
-        .skip((page - 1) * limit)
+        .skip(offset)
         .limit(limit)
         .lean(),
       Listing.countDocuments(filter),
@@ -136,7 +139,7 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
 
     const results = items.map((item, index) => ({
       id: item._id.toString(),
-      rank: (page - 1) * limit + index + 1,
+      rank: offset + index + 1,
       domain: item.domain,
       url: item.url,
       description: item.description,
@@ -146,7 +149,13 @@ export default async function listingsRoutes(fastify: FastifyInstance) {
       createdAt: item.createdAt,
     }));
 
-    return reply.send({ items: results, total, page, limit });
+    return reply.send({
+      items: results,
+      total,
+      page,
+      limit,
+      offset,
+    });
   });
 
   fastify.get("/listings/top", async (_request, reply) => {

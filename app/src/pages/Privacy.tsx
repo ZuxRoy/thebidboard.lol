@@ -21,10 +21,10 @@ export default function Privacy() {
           </Section>
 
           <Section title="2. Anonymous usage data">
-            To power the "online now" and "total visitors" counters, we generate a random,
-            anonymous identifier stored in your browser's local storage. It is not linked to your
-            name, email, or IP address, and is used only to count active sessions and unique
-            visits.
+            To power the "online now" counter, we generate a random, anonymous identifier stored
+            in your browser's local storage. It is not linked to your name, email, or IP address,
+            and is used only to count active sessions. Site-wide click totals come from Cloudflare
+            analytics.
           </Section>
 
           <Section title="3. Cookies">

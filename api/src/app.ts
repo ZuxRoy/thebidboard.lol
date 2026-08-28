@@ -5,7 +5,6 @@ import rateLimit from "@fastify/rate-limit";
 import mongoPlugin from "./plugins/mongo.js";
 import listingsRoutes from "./routes/listings.js";
 import webhookRoutes from "./routes/webhooks.js";
-import ogRoutes from "./routes/og.js";
 import presenceRoutes from "./routes/presence.js";
 import statsRoutes from "./routes/stats.js";
 import { env } from "./config/env.js";
@@ -34,7 +33,6 @@ export async function buildApp() {
 
   await app.register(listingsRoutes, { prefix: "/api" });
   await app.register(webhookRoutes, { prefix: "/api" });
-  await app.register(ogRoutes, { prefix: "/api" });
   await app.register(presenceRoutes, { prefix: "/api" });
   await app.register(statsRoutes, { prefix: "/api" });
 

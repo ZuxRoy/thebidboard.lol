@@ -3,8 +3,22 @@ import { formatAmount, formatTimeAgo } from "../lib/validators";
 import { getCategoryMeta } from "../lib/categories";
 
 export default function Ticker() {
-  const { data } = useTicker();
+  const { data, isLoading } = useTicker();
   const items = data?.items ?? [];
+
+  if (isLoading && items.length === 0) {
+    return (
+      <div className="w-full bg-ink text-surface text-xs py-2.5 px-4">
+        <div className="flex items-center gap-6 overflow-hidden">
+          <div className="h-3 w-14 rounded bg-white/15 animate-pulse shrink-0" />
+          <div className="h-3 w-40 rounded bg-white/10 animate-pulse shrink-0" />
+          <div className="h-3 w-28 rounded bg-white/10 animate-pulse shrink-0" />
+          <div className="h-3 w-36 rounded bg-white/10 animate-pulse shrink-0 hidden sm:block" />
+          <div className="h-3 w-24 rounded bg-white/10 animate-pulse shrink-0 hidden md:block" />
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

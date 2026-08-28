@@ -33,17 +33,18 @@ interface ListingsResponse {
   total: number;
   page: number;
   limit: number;
+  offset: number;
 }
 
 export function useListings(category: FilterId, page: number, limit: number) {
+  const offset = (page - 1) * limit;
   return useQuery({
-    queryKey: ["listings", category, page, limit],
+    queryKey: ["listings", category, offset, limit],
     queryFn: ({ signal }) =>
       apiFetch<ListingsResponse>(
-        `/listings?category=${encodeURIComponent(category)}&page=${page}&limit=${limit}`,
+        `/listings?category=${encodeURIComponent(category)}&offset=${offset}&limit=${limit}`,
         { signal }
       ),
-    placeholderData: (previous) => previous,
   });
 }
 
@@ -93,7 +94,7 @@ export function useCreateListing() {
 
 export interface PresenceStats {
   onlineNow: number;
-  totalVisitors: number;
+  totalClicks: number;
 }
 
 export function usePresenceStats() {
@@ -117,10 +118,16 @@ export interface CategoryStat {
   volumeCents: number;
 }
 
+export interface ClickPoint {
+  date: string;
+  clicks: number;
+}
+
 export interface BoardStats {
   totalListings: number;
   totalVolumeCents: number;
-  totalVisitors: number;
+  totalClicks: number;
+  clicksSeries: ClickPoint[];
   onlineNow: number;
   newestDomain: string | null;
   newestAt: string | null;
