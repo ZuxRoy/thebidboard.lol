@@ -1,0 +1,167 @@
+# TheBidBoard
+
+> Pay to own #1. TheBidBoard (https://thebidboard.lol) is a public product leaderboard where anyone can pay to rank a product, startup, or profile. Highest total amount paid keeps the crown.
+
+This file is the full-text corpus for TheBidBoard. Use https://thebidboard.lol/llms.txt for the curated index. Official site: https://thebidboard.lol
+
+## What TheBidBoard is
+
+TheBidBoard is a newspaper/classifieds-styled public leaderboard. Products, startups, people, and businesses pay to claim and defend a ranked spot. Rank is determined solely by the total amount paid for a listing. The current #1 is whoever has paid the most in aggregate.
+
+TheBidBoard is not an ad network with guaranteed impressions. It does not promise traffic, clicks, sales, or any other outcome from appearing on the board. Placement is paid ranking on a public list.
+
+## Ranking rules
+
+- Rank is the sort order of active listings by total amount paid (highest first). Ties are broken by earlier creation time.
+- A listing is identified by its normalized domain (or, for X/Twitter profiles, the profile URL such as x.com/{handle}). Submitting the same domain again tops up the existing listing instead of creating a second row.
+- Listings only appear on the public board after payment is confirmed. Pending unpaid submissions are not shown.
+- The amount required to take #1 is the current #1 total plus $1.
+- Minimum bid is $1.
+- Payments are for placement. They are non-refundable once a listing becomes active, except where required by law or at the operator's discretion.
+- Operators may remove any listing at any time, for any reason, without a refund.
+
+## How to claim a spot
+
+Visit https://thebidboard.lol/#claim and submit:
+
+- Product URL (required). A public website, product page, or profile URL.
+- Category (required). One of the 17 categories listed below.
+- Description (required). Maximum 100 characters.
+- Optional social links: Instagram, X (Twitter), LinkedIn, TikTok. Each must be a valid URL for that platform.
+- Amount in dollars (required). Minimum $1. The homepage shows the live price to claim #1.
+
+On submit, the visitor is redirected to Pocketsflow checkout for exactly that amount. After payment succeeds, the listing is activated and the paid amount is added to that listing's running total. That is how topping up works.
+
+## Categories
+
+Every listing is tagged with exactly one category. The leaderboard can be filtered to All or to a single category. Category filter is client-side on the homepage; there are no separate /category URLs.
+
+- saas: SaaS
+- mobile-apps: Mobile Apps
+- games: Games
+- tools-automation: Tools & Automation
+- ai-agents: AI Agents
+- seo-tools: SEO Tools
+- marketing-sales: Marketing & Sales
+- people: People
+- ecommerce: E-Commerce
+- fintech: Fintech
+- edtech: EdTech
+- marketplace: Marketplace
+- agencies: Agencies
+- developer-tools: Developer Tools
+- web3-crypto: Web3 & Crypto
+- design-creative: Design & Creative
+- productivity: Productivity
+
+## Pages
+
+### Home — https://thebidboard.lol/
+
+The homepage is the product. It includes:
+
+- A ticker of the latest confirmed claims (domain, amount, category, time).
+- Site header with TheBidBoard name, an "online now" presence count, links to the leaderboard and stats, and a "Claim a spot" button.
+- Claim section (#claim): headline "Claim #1 for {nextAmount}" plus the claim form and a preview of current top listings.
+- Leaderboard section (#leaderboard): category filter bar and paginated ranked listings (about 20 per page). Each row shows rank, display name/domain, description, category, amount paid, and optional social links. Rank 1–3 use gold/silver/bronze styling.
+- Footer with Stats, Terms, and Privacy links.
+
+Current ranked listings change as payments confirm. This corpus describes the product and rules; the live board is on the homepage.
+
+### Stats — https://thebidboard.lol/stats
+
+Title: Live board stats. Analytics from Cloudflare plus board data.
+
+Tiles: total bid volume, number of listings, online now, site clicks.
+
+Also shown: bid volume by category (count and volume), current #1 domain and amount, newest listing, and a clicks-over-time series from Cloudflare analytics.
+
+Online now is an anonymous session count (random id in localStorage, ~75 second window). It is not tied to name, email, or IP.
+
+### Terms of Service — https://thebidboard.lol/terms
+
+These Terms of Service ("Terms") govern use of TheBidBoard (the "Service"). By submitting a listing, making a payment, or otherwise using the Service, you agree to these Terms.
+
+1. What the Service does. TheBidBoard is a public leaderboard. Anyone can submit a product listing consisting of a URL, a short description, a category, and optional social links, and pay to rank that listing higher on the board. Ranking is determined solely by the total amount paid for a listing.
+
+2. Payments. Payments are processed by our payment provider. All payments are for placement on the board and are non-refundable once a listing becomes active, except where required by law or at our discretion.
+
+3. Acceptable listings. You may not submit listings that are illegal, fraudulent, infringe on intellectual property, contain malware, or link to content that is deceptive or harmful. We reserve the right to remove any listing at any time, for any reason, without a refund.
+
+4. No guarantee of results. We do not guarantee traffic, clicks, sales, or any other outcome from a listing on the board. The Service is provided "as is" without warranties of any kind.
+
+5. Limitation of liability. To the maximum extent permitted by law, TheBidBoard and its operators are not liable for any indirect, incidental, or consequential damages arising from your use of the Service.
+
+6. Changes to these Terms. We may update these Terms from time to time. Continued use of the Service after changes take effect constitutes acceptance of the revised Terms.
+
+7. Contact. Questions about these Terms can be sent to the contact address listed on the site.
+
+This Terms page on the site is a general starting template and is not a substitute for legal advice.
+
+### Privacy Policy — https://thebidboard.lol/privacy
+
+This Privacy Policy explains what information TheBidBoard collects and how it is used.
+
+1. Information you provide. When you submit a listing, we collect the product URL, description, category, any social links you add, and payment information (handled by our payment provider, not stored on our servers).
+
+2. Anonymous usage data. To power the "online now" counter, we generate a random, anonymous identifier stored in your browser's local storage. It is not linked to your name, email, or IP address, and is used only to count active sessions. Site-wide click totals come from Cloudflare analytics.
+
+3. Cookies. We do not use tracking or advertising cookies. The anonymous visitor identifier described above is stored in local storage, not a cookie, and can be cleared at any time from your browser settings.
+
+4. Third parties. Payments are processed by a third-party payment provider under its own privacy policy. We do not sell personal data to third parties.
+
+5. Data retention. Listing data is retained for as long as a listing remains on the board. Anonymous visitor records are retained to compute aggregate statistics and may be periodically cleaned up.
+
+6. Your choices. You can clear your browser's local storage at any time to reset your anonymous visitor identifier. Contact us if you would like a listing removed.
+
+7. Contact. Questions about this policy can be sent to the contact address listed on the site.
+
+This Privacy page on the site is a general starting template and is not a substitute for legal advice.
+
+## FAQ
+
+Q: What is TheBidBoard?
+A: A public pay-to-rank product leaderboard at https://thebidboard.lol. Highest total paid is #1.
+
+Q: How do I take #1?
+A: Pay at least one dollar more than the current #1's total. The homepage shows the live "Claim #1 for $X" amount.
+
+Q: Can I raise my existing listing?
+A: Yes. Submit the same product URL/domain again with a new amount. After payment, that amount is added to the listing's total.
+
+Q: When does a listing appear?
+A: Only after payment is confirmed. Unpaid drafts are not public.
+
+Q: What is the minimum bid?
+A: $1.
+
+Q: Are payments refundable?
+A: No, once a listing is active, except where required by law or at the operator's discretion.
+
+Q: Does ranking guarantee traffic or sales?
+A: No.
+
+Q: What can be listed?
+A: A URL plus a short description and category. Illegal, fraudulent, infringing, malware, or deceptive/harmful listings are not allowed and may be removed without refund.
+
+Q: Which social networks can be attached?
+A: Optional Instagram, X, LinkedIn, and TikTok profile URLs.
+
+Q: Where is the live ranked list?
+A: https://thebidboard.lol/#leaderboard
+
+Q: Where are live totals?
+A: https://thebidboard.lol/stats
+
+## Site map
+
+- https://thebidboard.lol/
+- https://thebidboard.lol/#claim
+- https://thebidboard.lol/#leaderboard
+- https://thebidboard.lol/stats
+- https://thebidboard.lol/terms
+- https://thebidboard.lol/privacy
+- https://thebidboard.lol/llms.txt
+- https://thebidboard.lol/llms-full.txt
+- https://thebidboard.lol/robots.txt
+- https://thebidboard.lol/sitemap.xml

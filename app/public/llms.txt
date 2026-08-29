@@ -1,0 +1,38 @@
+# TheBidBoard
+
+> Pay to own #1. TheBidBoard is a public product leaderboard at https://thebidboard.lol where anyone can pay to rank a product, startup, or profile. Highest total amount paid keeps the crown.
+
+TheBidBoard is a pay-to-rank classifieds board. Anyone submits a product URL, a short description, a category, optional social links, and a dollar amount (minimum $1). After checkout, the listing appears on the public board. Rank is determined solely by the cumulative amount paid for that listing. Paying again for the same domain tops up the existing spot. Listings are not shown until payment is confirmed. Placement does not guarantee traffic, clicks, or sales.
+
+## Pages
+
+- [Home](https://thebidboard.lol/): Claim form, live ticker of recent claims, and the ranked product leaderboard
+- [Claim a spot](https://thebidboard.lol/#claim): Form to submit a URL, description, category, socials, and bid amount
+- [Leaderboard](https://thebidboard.lol/#leaderboard): Active listings ranked by total amount paid, filterable by category
+- [Live board stats](https://thebidboard.lol/stats): Total bid volume, listing count, online now, site clicks, volume by category, current #1, newest listing
+- [Terms of Service](https://thebidboard.lol/terms): Placement rules, payments, acceptable listings, and liability
+- [Privacy Policy](https://thebidboard.lol/privacy): What data is collected and how anonymous presence counting works
+
+## How it works
+
+- [Full site corpus](https://thebidboard.lol/llms-full.txt): Complete product rules, claim flow, categories, page-by-page copy, terms, privacy, and FAQ in one file
+
+## Categories
+
+Listings are tagged with one of: SaaS, Mobile Apps, Games, Tools & Automation, AI Agents, SEO Tools, Marketing & Sales, People, E-Commerce, Fintech, EdTech, Marketplace, Agencies, Developer Tools, Web3 & Crypto, Design & Creative, Productivity. The board can be filtered to All or any single category.
+
+## Live data
+
+- [Homepage leaderboard](https://thebidboard.lol/#leaderboard): Current ranked listings (updates as payments confirm)
+- [Stats](https://thebidboard.lol/stats): Live totals for volume, listings, presence, and clicks
+
+## Policies
+
+- [Terms of Service](https://thebidboard.lol/terms): Non-refundable placement fees once a listing is active, except where required by law
+- [Privacy Policy](https://thebidboard.lol/privacy): No tracking cookies; anonymous localStorage id for the online-now counter; payment details handled by the payment provider
+
+## Optional
+
+- [llms.txt](https://thebidboard.lol/llms.txt): This index
+- [robots.txt](https://thebidboard.lol/robots.txt): Crawl rules allowing search and AI crawlers
+- [sitemap.xml](https://thebidboard.lol/sitemap.xml): All public URLs

@@ -4,24 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TheBidBoard</title>
     <meta
       name="description"
-      content="Pay to own #1. The public product leaderboard — highest bid keeps the crown."
+      content="TheBidBoard is a public product leaderboard. Pay to rank your product, startup, or profile — highest total amount paid keeps #1. Minimum bid $1."
     />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://thebidboard.lol/" />
+    <link rel="alternate" type="text/plain" href="https://thebidboard.lol/llms.txt" title="LLM index" />
+    <link rel="alternate" type="text/plain" href="https://thebidboard.lol/llms-full.txt" title="LLM full corpus" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,600&family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>TheBidBoard</title>
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TheBidBoard" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://thebidboard.lol/" />
-    <meta property="og:title" content="TheBidBoard" />
+    <meta property="og:title" content="TheBidBoard — Pay to own #1 on the public product leaderboard" />
     <meta
       property="og:description"
-      content="Pay to own #1. The public product leaderboard — highest bid keeps the crown."
+      content="TheBidBoard is a public product leaderboard. Pay to rank your product, startup, or profile — highest total amount paid keeps #1. Minimum bid $1."
     />
     <meta property="og:image" content="https://thebidboard.lol/og.png?v=4" />
     <meta property="og:image:width" content="1200" />
@@ -30,16 +36,137 @@
     <meta property="og:image:alt" content="TheBidBoard — a public product leaderboard" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TheBidBoard" />
+    <meta name="twitter:title" content="TheBidBoard — Pay to own #1 on the public product leaderboard" />
     <meta
       name="twitter:description"
-      content="Pay to own #1. The public product leaderboard — highest bid keeps the crown."
+      content="TheBidBoard is a public product leaderboard. Pay to rank your product, startup, or profile — highest total amount paid keeps #1. Minimum bid $1."
     />
     <meta name="twitter:image" content="https://thebidboard.lol/og.png?v=4" />
     <meta name="twitter:image:alt" content="TheBidBoard — a public product leaderboard" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://thebidboard.lol/#organization",
+            "name": "TheBidBoard",
+            "url": "https://thebidboard.lol/",
+            "logo": "https://thebidboard.lol/favicon.svg",
+            "description": "A public product leaderboard where anyone can pay to rank a product, startup, or profile. Highest total amount paid keeps #1."
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://thebidboard.lol/#website",
+            "url": "https://thebidboard.lol/",
+            "name": "TheBidBoard",
+            "description": "Pay to own #1. The public product leaderboard — highest bid keeps the crown.",
+            "inLanguage": "en-US",
+            "publisher": { "@id": "https://thebidboard.lol/#organization" }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://thebidboard.lol/#app",
+            "name": "TheBidBoard",
+            "url": "https://thebidboard.lol/",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any",
+            "description": "Public pay-to-rank product leaderboard. Submit a URL, description, and category, then pay to rank. Rank is the cumulative amount paid. Minimum bid $1. Listings appear only after payment is confirmed.",
+            "offers": {
+              "@type": "Offer",
+              "price": "1.00",
+              "priceCurrency": "USD",
+              "description": "Minimum placement bid. Rank is determined by total amount paid; taking #1 costs one dollar more than the current leader."
+            },
+            "publisher": { "@id": "https://thebidboard.lol/#organization" }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://thebidboard.lol/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is TheBidBoard?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TheBidBoard is a public pay-to-rank product leaderboard at https://thebidboard.lol. Anyone can pay to rank a product, startup, or profile. Highest total amount paid is #1."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does ranking work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Rank is determined solely by the total amount paid for a listing. Paying again for the same domain tops up the existing spot. Listings appear on the board only after payment is confirmed."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I take #1?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Pay at least one dollar more than the current #1 total. The homepage shows the live amount needed to claim #1. Minimum bid is $1."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are payments refundable?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Payments are for placement and are non-refundable once a listing becomes active, except where required by law or at the operator's discretion. Placement does not guarantee traffic, clicks, or sales."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main>
+        <h1>TheBidBoard</h1>
+        <p>
+          Pay to own #1. TheBidBoard is a public product leaderboard at
+          <a href="https://thebidboard.lol/">https://thebidboard.lol</a>.
+          Anyone can pay to rank a product, startup, or profile. Highest total
+          amount paid keeps the crown. Minimum bid is $1.
+        </p>
+        <h2>How it works</h2>
+        <p>
+          Submit a product URL, a short description (100 characters max), a
+          category, optional Instagram / X / LinkedIn / TikTok links, and a
+          dollar amount. After checkout, the listing appears on the public
+          board. Rank is the cumulative amount paid. Paying again for the same
+          domain tops up the existing spot. Listings are not shown until
+          payment is confirmed. Placement does not guarantee traffic, clicks,
+          or sales.
+        </p>
+        <h2>Pages</h2>
+        <ul>
+          <li><a href="https://thebidboard.lol/#claim">Claim a spot</a></li>
+          <li><a href="https://thebidboard.lol/#leaderboard">Leaderboard</a></li>
+          <li><a href="https://thebidboard.lol/stats">Live board stats</a></li>
+          <li><a href="https://thebidboard.lol/terms">Terms of Service</a></li>
+          <li><a href="https://thebidboard.lol/privacy">Privacy Policy</a></li>
+        </ul>
+        <h2>Categories</h2>
+        <p>
+          SaaS, Mobile Apps, Games, Tools &amp; Automation, AI Agents, SEO
+          Tools, Marketing &amp; Sales, People, E-Commerce, Fintech, EdTech,
+          Marketplace, Agencies, Developer Tools, Web3 &amp; Crypto, Design
+          &amp; Creative, Productivity.
+        </p>
+        <p>
+          Full machine-readable site description:
+          <a href="https://thebidboard.lol/llms.txt">llms.txt</a>
+          and
+          <a href="https://thebidboard.lol/llms-full.txt">llms-full.txt</a>.
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
